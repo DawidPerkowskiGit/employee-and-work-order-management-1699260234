@@ -41,7 +41,4 @@ public class MainAppController {
         return controller.getHomePage();
     }
 
-
-
-
 }
