@@ -1,4 +1,4 @@
-package dpapps;
+package dpapps.maincontrollertests;
 
 import dpapps.constants.MessageConstants;
 import org.junit.jupiter.api.Test;
@@ -15,13 +15,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class HealthCheckTests {
+public class MainPageTests {
+
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
-        this.mockMvc.perform(get("/health")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(MessageConstants.APP_IS_RUNNING)));
+    public void shouldReturnOkResponseForSlashHomepage() throws Exception {
+        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldReturnOkResponseForHomepage() throws Exception {
+        this.mockMvc.perform(get("")).andDo(print()).andExpect(status().isOk());
     }
 }
