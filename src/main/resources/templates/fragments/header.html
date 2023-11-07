@@ -12,18 +12,17 @@
 <nav class="navbar navbar-expand-md bg-dark navbar-dark" th:fragment="navbar">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" th:href="@{/}">Easy Task Manager</a>
+            <a class="navbar-brand" th:href="@{/}">Easy Work Manager</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a></li>
 
-            <li><a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/register}">Register</a></li>
+            <li><a class="nav-link" th:href="@{/login}">Login</a></li>
 
-            <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/profile}">Profile</a></li>
+            <li><a class="nav-link" th:href="@{/register}">Register</a></li>
 
-            <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
+            <li><a class="nav-link" th:href="@{/profile}">Profile</a></li>
 
-
+            <li><a class="nav-link" th:href="@{/logout}">Logout</a></li>
         </ul>
     </div>
 </nav>
