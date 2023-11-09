@@ -1,7 +1,6 @@
 package dpapps.controller;
 
-import dpapps.constants.MessageConstants;
-import dpapps.service.MainAppControllerService;
+import dpapps.controller.service.MainAppControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

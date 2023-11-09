@@ -1,4 +1,4 @@
-package dpapps.service;
+package dpapps.controller.service;
 
 import dpapps.constants.MessageConstants;
 
