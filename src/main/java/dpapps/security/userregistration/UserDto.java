@@ -1,10 +1,11 @@
-package dpapps.security;
+package dpapps.security.userregistration;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * User registration template data
@@ -19,4 +20,6 @@ public class UserDto {
     private String login;
     @NotEmpty(message = "Password should not be empty")
     private String password;
+    @NotEmpty(message = "Email should not be empty")
+    private String email;
 }

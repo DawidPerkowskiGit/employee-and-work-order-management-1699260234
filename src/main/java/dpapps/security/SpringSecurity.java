@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.security;
+package dpapps.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,22 +40,15 @@ public class SpringSecurity {
                 .authorizeHttpRequests(
                         (authorize) -> authorize
                                 .requestMatchers("/register/**").permitAll()
-                                .requestMatchers("/index").permitAll()
-                                .requestMatchers("/users").hasRole("ADMIN")
-                                .requestMatchers("/profile").authenticated()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("").permitAll()
-                                .requestMatchers("/generate").authenticated()
-                                .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/health").permitAll()
-                                .requestMatchers("/log").hasRole("ADMIN")
-
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .successForwardUrl("/index")
-                        .defaultSuccessUrl("/index")
+                        .successForwardUrl("/")
+                        .defaultSuccessUrl("/")
                         .permitAll()
                 )
                 .logout(logout -> logout

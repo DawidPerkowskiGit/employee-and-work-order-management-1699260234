@@ -1,8 +1,14 @@
 package dpapps.controller.service;
 
-import dpapps.model.User;
+import dpapps.security.userregistration.UserDto;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 public interface UserManagementControllerService {
 
-    public void addUser(User user);
+    String register(Model model);
+
+    String processRegister(UserDto userDto, BindingResult result, Model model);
+
+    String processLogin();
 }
