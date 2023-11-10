@@ -3,9 +3,11 @@ package dpapps.model.repository.service;
 import dpapps.constants.UserMessagesConstants;
 import dpapps.model.User;
 import dpapps.model.repository.UserRepository;
+import dpapps.security.userregistration.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,9 +16,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> list() {
@@ -65,4 +70,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByLogin(login);
     }
 
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    public String add(UserDto userDto) {
+        User user = new User(userDto.getLogin(), passwordEncoder.encode(userDto.getPassword()), userDto.getEmail());
+        return this.add(user);
+    }
 }
