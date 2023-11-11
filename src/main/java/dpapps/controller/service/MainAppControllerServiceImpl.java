@@ -13,4 +13,7 @@ public class MainAppControllerServiceImpl implements MainAppControllerService{
     public String getHomePage() {
         return "index";
     }
+
+    @Override
+    public String expiredUrl() { return "expiredurl";}
 }

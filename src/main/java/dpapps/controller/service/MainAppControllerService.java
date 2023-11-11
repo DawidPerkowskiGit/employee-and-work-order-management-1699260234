@@ -13,4 +13,6 @@ public interface MainAppControllerService {
      * Returns homepage view
      */
     public String getHomePage();
+
+    String expiredUrl();
 }

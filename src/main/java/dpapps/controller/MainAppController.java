@@ -40,4 +40,9 @@ public class MainAppController {
         return controller.getHomePage();
     }
 
+    @GetMapping("/expiredurl")
+    public String expiredUrl() {
+        return controller.expiredUrl();
+    }
+
 }

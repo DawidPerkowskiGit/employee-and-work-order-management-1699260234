@@ -52,7 +52,15 @@ public class SpringSecurity {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll());
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll())
+                .sessionManagement((sessionManagement) ->
+                        sessionManagement
+                                .sessionConcurrency((sessionConcurrency) ->
+                                        sessionConcurrency
+                                                .maximumSessions(1)
+                                                .expiredUrl("/expiredurl")
+                                )
+                );
         return http.build();
     }
 
