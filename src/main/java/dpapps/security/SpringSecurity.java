@@ -43,6 +43,7 @@ public class SpringSecurity {
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("").permitAll()
                                 .requestMatchers("/health").permitAll()
+                                .requestMatchers("/changepass/**").permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
