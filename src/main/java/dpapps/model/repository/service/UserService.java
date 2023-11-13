@@ -5,17 +5,21 @@ import dpapps.security.userregistration.UserDto;
 
 import java.util.List;
 
-public interface UserService{
+public interface UserService {
 
-    public List<User> list();
+    List<User> list();
 
-    public String add(User user);
+    String add(User user);
 
-    public String add(UserDto user);
+    String add(UserDto user);
 
-    public String delete(String login);
+    String delete(String login);
 
-    public boolean existsByLogin(String login);
+    boolean existsByLogin(String login);
 
     User findByLogin(String login);
+
+    User findByLoginAndEmail(String login, String email);
+
+    void changePassword(String login, String password);
 }
