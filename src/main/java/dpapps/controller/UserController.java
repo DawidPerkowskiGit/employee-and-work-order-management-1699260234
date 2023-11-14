@@ -1,6 +1,7 @@
 package dpapps.controller;
 
 import dpapps.controller.service.UserManagementControllerService;
+import dpapps.security.changepassword.ChangePasswordDTO;
 import dpapps.security.userregistration.UserDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,17 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
         return service.processLogin();
+    }
+
+    @GetMapping("/changepass")
+    public String changePassword(Model model) {
+        return service.changePassword(model);
+    }
+
+
+    @PostMapping("/changepass/update")
+    public String processChangePass(@Valid @ModelAttribute("userpass") ChangePasswordDTO dto, BindingResult result, Model model) {
+        return service.processChangePassword(dto, result, model);
     }
 
 

@@ -74,8 +74,22 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByLogin(login);
     }
 
+    @Override
+    public User findByLoginAndEmail(String login, String email) {
+        return userRepository.findByLoginAndEmail(login, email);
+    }
+
     public String add(UserDto userDto) {
         User user = new User(userDto.getLogin(), passwordEncoder.encode(userDto.getPassword()), userDto.getEmail());
         return this.add(user);
+    }
+
+    public void changePassword(String login, String password) {
+        String newPassword = passwordEncoder.encode(password);
+
+        User user = this.findByLogin(login);
+
+        user.setPassword(newPassword);
+        userRepository.save(user);
     }
 }
