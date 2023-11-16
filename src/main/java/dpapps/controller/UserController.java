@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -53,6 +54,11 @@ public class UserController {
     @PostMapping("/changepass/update")
     public String processChangePass(@Valid @ModelAttribute("userpass") ChangePasswordDTO dto, BindingResult result, Model model) {
         return service.processChangePassword(dto, result, model);
+    }
+
+    @GetMapping("/verify/{code}")
+    public String verifyUser(@PathVariable String code) {
+        return service.processUserVerification(code);
     }
 
 
