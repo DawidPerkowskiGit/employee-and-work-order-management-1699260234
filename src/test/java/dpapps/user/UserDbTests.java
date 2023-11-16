@@ -2,7 +2,11 @@ package dpapps.user;
 
 import dpapps.constants.UserMessagesConstants;
 import dpapps.model.User;
+import dpapps.model.Verification;
+import dpapps.model.repository.UserRepository;
+import dpapps.model.repository.VerificationRepository;
 import dpapps.model.repository.service.UserService;
+import dpapps.model.repository.service.VerificationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class UserDbTests {
@@ -21,14 +24,22 @@ public class UserDbTests {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final VerificationService verificationService;
+
+    private final VerificationRepository verificationRepository;
+
     private final String[] userData = {"testlogin", "testpassword", "testemail"};
 
     private final User user = new User(userData[0], userData[1], userData[2]);
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    public UserDbTests(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserDbTests(UserService userService, PasswordEncoder passwordEncoder, VerificationService verificationService, VerificationRepository verificationRepository) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.verificationService = verificationService;
+        this.verificationRepository = verificationRepository;
         this.user.setPassword(this.passwordEncoder.encode(user.getPassword()));
     }
 
@@ -90,12 +101,77 @@ public class UserDbTests {
         assertNotEquals(oldPassword, newPassword);
     }
 
+    @Test
+    public void shouldVerifyUser() {
+        cleanupVerificationRepository();
+        addTestingUser();
+
+        User user = userService.findByLogin(userData[0]);
+
+        boolean verifiedBefore = user.getVerified();
+
+        this.setupVerification(userData[0]);
+        Verification verification = verificationRepository.findByUser(user);
+        String code = verification.getCode();
+
+        boolean result = verificationService.processVerification(code);
+
+        boolean verifiedAfter = userService.findByLogin(userData[0]).getVerified();
+
+        assertTrue(result == verifiedAfter == !verifiedBefore);
+    }
+
+    @Test
+    public void shouldNotVerifyUser() {
+        cleanupVerificationRepository();
+        addTestingUser();
+
+        User user = userService.findByLogin(userData[0]);
+
+        boolean verifiedBefore = user.getVerified();
+
+        this.setupVerification(userData[0]);
+        Verification verification = verificationRepository.findByUser(user);
+        String code = verification.getCode() + "invalid";
+
+        boolean result = verificationService.processVerification(code);
+
+        boolean verifiedAfter = userService.findByLogin(userData[0]).getVerified();
+
+        assertFalse(result == verifiedBefore == verifiedAfter);
+    }
 
     private String removeTestingUser() {
-        return userService.delete(userData[0]);
+        try {
+
+            return userService.delete(userData[0]);
+        }
+        catch (Exception e) {
+            System.out.println("could not remove testing user");
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private String addTestingUser() {
         return userService.add(user);
+    }
+
+    private void cleanupVerificationRepository() {
+
+        try {
+            User user = userService.findByLogin(userData[0]);
+            Verification verification = verificationRepository.findByUser(user);
+            verificationRepository.deleteByCode(verification.getCode());
+        } catch (Exception e) {
+            System.out.println("Verification repository cleanup failed");
+            e.printStackTrace();
+        }
+    }
+
+    private void setupVerification(String login) {
+        User user = userService.findByLogin(login);
+        String verificationCode = this.verificationService.generateVerificationCode();
+        this.verificationService.assignVerificationCodeToUser(user, verificationCode);
     }
 }

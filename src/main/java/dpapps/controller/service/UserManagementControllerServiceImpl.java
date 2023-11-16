@@ -1,7 +1,9 @@
 package dpapps.controller.service;
 
 import dpapps.model.User;
+import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.service.UserService;
+import dpapps.model.repository.service.VerificationService;
 import dpapps.security.changepassword.ChangePasswordDTO;
 import dpapps.security.userregistration.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,15 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
     private final UserService userService;
 
+    private final VerificationService verificationService;
+    private final UserRepository userRepository;
+
     @Autowired
-    public UserManagementControllerServiceImpl(UserService userService) {
+    public UserManagementControllerServiceImpl(UserService userService, VerificationService verificationService,
+                                               UserRepository userRepository) {
         this.userService = userService;
+        this.verificationService = verificationService;
+        this.userRepository = userRepository;
     }
 
     public String register(Model model) {
@@ -39,7 +47,17 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
 
         userService.add(userDto);
-        return "redirect:/index";
+
+        this.setupVerification(userDto.getLogin());
+
+        return "afterregistration";
+    }
+
+    private void setupVerification(String login) {
+        User user = userRepository.findByLogin(login);
+        String verificationCode = this.verificationService.generateVerificationCode();
+        this.verificationService.assignVerificationCodeToUser(user, verificationCode);
+        this.verificationService.sendVerificationEmail(user, verificationCode);
     }
 
     public String processLogin() {
@@ -74,5 +92,14 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
             return "/changepass";
         }
         return "index";
+    }
+
+    @Override
+    public String processUserVerification(String code) {
+       boolean result = verificationService.processVerification(code);
+       if (result) {
+           return "verificationSuccessful";
+       }
+       return "verificationUnsuccessful";
     }
 }
