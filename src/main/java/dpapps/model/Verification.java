@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "verification")
-public class Verification {
+public class Verification implements DatabaseEntryMarker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

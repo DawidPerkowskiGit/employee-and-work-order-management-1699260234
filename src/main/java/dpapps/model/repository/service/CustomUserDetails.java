@@ -1,5 +1,6 @@
 package dpapps.model.repository.service;
 
+import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetails implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final UserAndRolePairService userAndRolePairService;
+
     @Autowired
-    public CustomUserDetails(UserRepository userRepository) {
+    public CustomUserDetails(UserRepository userRepository, UserAndRolePairService userAndRolePairService) {
         this.userRepository = userRepository;
+        this.userAndRolePairService = userAndRolePairService;
     }
 
     @Override
@@ -27,10 +34,19 @@ public class CustomUserDetails implements UserDetailsService {
         User user = userRepository.findByLogin(username);
 
         if (user != null) {
-            return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), new ArrayList<>()); //TODO remember to come back here when roles are added
+            List<Role> roles = userAndRolePairService.getUserRoles(user);
+            return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), mapRolesToAuthorities(roles));
         } else {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
+    }
+
+    /**
+     * Returns list of user's roles
+     */
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        Collection<? extends GrantedAuthority> mapRoles = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return mapRoles;
     }
 
 }
