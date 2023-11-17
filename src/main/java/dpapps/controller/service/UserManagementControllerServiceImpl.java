@@ -4,7 +4,7 @@ import dpapps.model.User;
 import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.VerificationService;
-import dpapps.security.changepassword.ChangePasswordDTO;
+import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -66,13 +66,13 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
     @Override
     public String changePassword(Model model) {
-        ChangePasswordDTO userpass = new ChangePasswordDTO();
+        ChangePasswordDto userpass = new ChangePasswordDto();
         model.addAttribute("userpass", userpass);
         return "changepass";
     }
 
     @Override
-    public String processChangePassword(ChangePasswordDTO dto, BindingResult result, Model model) {
+    public String processChangePassword(ChangePasswordDto dto, BindingResult result, Model model) {
         User existingUser = userService.findByLoginAndEmail(dto.getLogin(), dto.getEmail());
 
         if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty() && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) {

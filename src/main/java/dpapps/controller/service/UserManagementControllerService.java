@@ -1,6 +1,6 @@
 package dpapps.controller.service;
 
-import dpapps.security.changepassword.ChangePasswordDTO;
+import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +30,7 @@ public interface UserManagementControllerService {
     /**
      * Processes users change password request and renders result view
      */
-    String processChangePassword(ChangePasswordDTO dto, BindingResult result, Model model);
+    String processChangePassword(ChangePasswordDto dto, BindingResult result, Model model);
 
     /**
      * Attempts to verify the user, returns result view
