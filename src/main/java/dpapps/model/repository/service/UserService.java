@@ -1,9 +1,11 @@
 package dpapps.model.repository.service;
 
+import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.security.userregistration.UserDto;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -46,4 +48,27 @@ public interface UserService {
      * Attempts to change user password
      */
     void changePassword(String login, String password);
+
+
+    /**
+     * Adds Role to a User. Returns result of the modification. Role Entity is passed as an argument
+     */
+    boolean grantUserRole(User user, Role role);
+
+    /**
+     * Adds Role to a User. Returns result of the modification. Role name is passed as an argument
+     */
+    boolean grantUserRole(User user, String roleName);
+
+
+    /**
+     * Returns Users roles
+     */
+    Set<Role> getUserRoles(User user);
+
+
+    /**
+     * Returns Users roles names
+     */
+    Set<String> getUserRoleNames(User user);
 }
