@@ -11,9 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +19,10 @@ public class CustomUserDetails implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final UserAndRolePairService userAndRolePairService;
 
     @Autowired
-    public CustomUserDetails(UserRepository userRepository, UserAndRolePairService userAndRolePairService) {
+    public CustomUserDetails(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userAndRolePairService = userAndRolePairService;
     }
 
     @Override
@@ -34,8 +30,7 @@ public class CustomUserDetails implements UserDetailsService {
         User user = userRepository.findByLogin(username);
 
         if (user != null) {
-            List<Role> roles = userAndRolePairService.getUserRoles(user);
-            return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), mapRolesToAuthorities(roles));
+            return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
         } else {
             throw new UsernameNotFoundException("Invalid username or password.");
         }

@@ -2,10 +2,9 @@ package dpapps;
 
 import dpapps.constants.RoleConstants;
 import dpapps.model.User;
-import dpapps.model.repository.UserAndRolePairRepository;
 import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.service.RoleService;
-import dpapps.model.repository.service.UserAndRolePairService;
+import dpapps.model.repository.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +16,18 @@ public class AddRoles {
 
     private final UserRepository userRepository;
 
-    private final UserAndRolePairService userAndRolePairService;
+    private final UserService userService;
+
+    private final String[] userData = {"admin", "adminpass", "adminemail"};
+
+    private final User user = new User(userData[0], userData[1], userData[2]);
+
 
     @Autowired
-    public AddRoles(RoleService roleService, UserRepository userRepository, UserAndRolePairService userAndRolePairService) {
+    public AddRoles(RoleService roleService, UserRepository userRepository, UserService userService) {
         this.roleService = roleService;
         this.userRepository = userRepository;
-        this.userAndRolePairService = userAndRolePairService;
+        this.userService = userService;
     }
 
     @Test
@@ -40,8 +44,24 @@ public class AddRoles {
     }
 
     @Test
-    public void grantRole() {
+    public void grantAdminRole() {
         User user = userRepository.findByLogin("admin");
-//        userAndRolePairService.grantUserRole();
+        userService.grantUserRole(user, RoleConstants.ROLE_ADMIN);
+    }
+
+    @Test
+    public void grantOperatorRole() {
+        User user = userRepository.findByLogin("operator");
+        userService.grantUserRole(user, RoleConstants.ROLE_OPERATOR);
+    }
+
+    @Test
+    public void grantDesignerRole() {
+        User user = userRepository.findByLogin("designer");
+        userService.grantUserRole(user, RoleConstants.ROLE_DESIGNER);
+    }
+    @Test
+    public void addTestingUser() {
+        userService.add(user);
     }
 }

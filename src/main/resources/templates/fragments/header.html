@@ -15,14 +15,28 @@
             <a class="navbar-brand" th:href="@{/}">Easy Work Manager</a>
         </div>
         <ul class="nav navbar-nav">
+            <div sec:authorize="isAuthenticated()">
+                <li><a class="detail" >
+                    Logged user: <span sec:authentication="name"></span>
+                    Roles: <span sec:authentication="principal.authorities"></span>
+                </a> </li>
+            </div>
 
-            <li><a class="nav-link"  sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a></li>
+            <li><a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a></li>
 
-            <li><a class="nav-link"  sec:authorize="!isAuthenticated()" th:href="@{/register}">Register</a></li>
+            <li><a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/register}">Register</a></li>
 
-            <li><a class="nav-link"  sec:authorize="isAuthenticated()" th:href="@{/profile}">Profile</a></li>
+            <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/profile}">Profile</a></li>
 
-            <li><a class="nav-link"  sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
+            <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
+
+            <li><a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/dashboard}">Admin
+                dashboard</a></li>
+
+            <li><a class="nav-link" sec:authorize="hasRole('ROLE_OPERATOR')" th:href="@{/operator/dashboard}">Operator
+                dashboard</a></li>
+            <li><a class="nav-link" sec:authorize="hasRole('ROLE_DESIGNER')" th:href="@{/designer/dashboard}">Designer
+                dashboard</a></li>
         </ul>
     </div>
 </nav>
