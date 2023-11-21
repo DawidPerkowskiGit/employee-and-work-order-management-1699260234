@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class MainAppController {
 
-    private final MainAppControllerService controller;
+    private final MainAppControllerService controllerService;
 
     @Autowired
-    MainAppController(MainAppControllerService controller) {
-        this.controller = controller;
+    MainAppController(MainAppControllerService controllerService) {
+        this.controllerService = controllerService;
     }
 
     /**
@@ -21,7 +21,7 @@ public class MainAppController {
      */
     @GetMapping("/health")
     public @ResponseBody String healthCheck() {
-        return controller.getHealthCheck();
+        return controllerService.getHealthCheck();
     }
 
     /**
@@ -29,7 +29,7 @@ public class MainAppController {
      */
     @GetMapping("/")
     public String homePageSlash() {
-        return controller.getHomePage();
+        return controllerService.getHomePage();
     }
 
     /**
@@ -37,12 +37,12 @@ public class MainAppController {
      */
     @GetMapping("")
     public String homePage() {
-        return controller.getHomePage();
+        return controllerService.getHomePage();
     }
 
     @GetMapping("/expiredurl")
     public String expiredUrl() {
-        return controller.expiredUrl();
+        return controllerService.expiredUrl();
     }
 
 }

@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
-    private final UserManagementControllerService service;
+    private final UserManagementControllerService controllerService;
 
     @Autowired
-    public UserController(UserManagementControllerService service) {
-        this.service = service;
+    public UserController(UserManagementControllerService controllerService) {
+        this.controllerService = controllerService;
     }
 
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        return service.register(model);
+        return controllerService.register(model);
     }
 
     /**
@@ -34,7 +34,7 @@ public class UserController {
      */
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-        return service.processRegister(userDto, result, model);
+        return controllerService.processRegister(userDto, result, model);
     }
 
     /**
@@ -42,23 +42,23 @@ public class UserController {
      */
     @GetMapping("/login")
     public String login() {
-        return service.processLogin();
+        return controllerService.processLogin();
     }
 
     @GetMapping("/changepass")
     public String changePassword(Model model) {
-        return service.changePassword(model);
+        return controllerService.changePassword(model);
     }
 
 
     @PostMapping("/changepass/update")
     public String processChangePass(@Valid @ModelAttribute("userpass") ChangePasswordDto dto, BindingResult result, Model model) {
-        return service.processChangePassword(dto, result, model);
+        return controllerService.processChangePassword(dto, result, model);
     }
 
     @GetMapping("/verify/{code}")
     public String verifyUser(@PathVariable String code) {
-        return service.processUserVerification(code);
+        return controllerService.processUserVerification(code);
     }
 
 

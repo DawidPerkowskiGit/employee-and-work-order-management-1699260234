@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class RoleChecker {
 
-    private List<String> roles = new ArrayList<>();
+    public List<String> roles = new ArrayList<>();
 
     public RoleChecker() {
         this.roles.add(RoleConstants.ROLE_ADMIN);

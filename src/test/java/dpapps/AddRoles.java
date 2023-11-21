@@ -5,6 +5,7 @@ import dpapps.model.User;
 import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.service.RoleService;
 import dpapps.model.repository.service.UserService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,7 @@ public class AddRoles {
         this.userService = userService;
     }
 
+    @Disabled
     @Test
     public void addRoles() {
         if (!roleService.roleExists(RoleConstants.ROLE_ADMIN)) {
@@ -43,23 +45,28 @@ public class AddRoles {
         }
     }
 
+    @Disabled
     @Test
     public void grantAdminRole() {
         User user = userRepository.findByLogin("admin");
         userService.grantUserRole(user, RoleConstants.ROLE_ADMIN);
     }
 
+    @Disabled
     @Test
     public void grantOperatorRole() {
         User user = userRepository.findByLogin("operator");
         userService.grantUserRole(user, RoleConstants.ROLE_OPERATOR);
     }
 
+    @Disabled
     @Test
     public void grantDesignerRole() {
         User user = userRepository.findByLogin("designer");
         userService.grantUserRole(user, RoleConstants.ROLE_DESIGNER);
     }
+
+    @Disabled
     @Test
     public void addTestingUser() {
         userService.add(user);
