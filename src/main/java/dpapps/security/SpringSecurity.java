@@ -1,5 +1,6 @@
 package dpapps.security;
 
+import dpapps.constants.RoleConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,9 @@ public class SpringSecurity {
                                 .requestMatchers("/health").permitAll()
                                 .requestMatchers("/changepass/**").permitAll()
                                 .requestMatchers("/verify/**").permitAll()
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/**").hasAuthority(RoleConstants.ROLE_ADMIN)
+//                                .requestMatchers("/admin/**").permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
