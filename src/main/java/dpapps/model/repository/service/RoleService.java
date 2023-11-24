@@ -1,7 +1,8 @@
 package dpapps.model.repository.service;
 
 import dpapps.model.Role;
-import dpapps.model.User;
+
+import java.util.List;
 
 public interface RoleService {
 
@@ -19,5 +20,15 @@ public interface RoleService {
      * Returns role name
      */
     String getName(Role role);
+
+    /**
+     * Returns Roles bases on its ID
+     */
+    List<Role> getRolesById(List<Long> listOfRoles);
+
+    /**
+     * Returns all Roles
+     */
+    List<Role> findAll();
 
 }

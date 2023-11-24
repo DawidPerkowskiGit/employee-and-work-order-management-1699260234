@@ -14,9 +14,8 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -120,7 +119,7 @@ public class UserServiceImpl implements UserService {
         }
 
         try {
-            Set<Role> userRoles = this.getUserRoles(user);
+            List<Role> userRoles = this.getUserRoles(user);
 
 
             userRoles.add(role);
@@ -145,13 +144,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Role> getUserRoles(User user) {
+    public List<Role> getUserRoles(User user) {
         return user.getRoles();
     }
 
     @Override
-    public Set<String> getUserRoleNames(User user) {
-        Set<String> roleNames = new HashSet<>();
+    public List<String> getUserRoleNames(User user) {
+        List<String> roleNames = new ArrayList<>();
 
         for (Role role : this.getUserRoles(user)
         ) {
@@ -159,6 +158,24 @@ public class UserServiceImpl implements UserService {
         }
 
         return roleNames;
+    }
+
+    @Override
+    public void saveUser(User user) {
+        this.userRepository.save(user);
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        if (this.userRepository.findById(id).isPresent()) {
+            return this.userRepository.findById(id).get();
+        }
+        return new User();
+    }
+
+    @Override
+    public List<User> findAll() {
+        return this.userRepository.findAll();
     }
 
     private boolean isRoleValid(Role role) {

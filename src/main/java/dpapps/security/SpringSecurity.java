@@ -46,9 +46,8 @@ public class SpringSecurity {
                                 .requestMatchers("/health").permitAll()
                                 .requestMatchers("/changepass/**").permitAll()
                                 .requestMatchers("/verify/**").permitAll()
-//                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/admin/**").hasAuthority(RoleConstants.ROLE_ADMIN)
-//                                .requestMatchers("/admin/**").permitAll()
+
                 )
                 .formLogin(form -> form
                         .loginPage("/login")

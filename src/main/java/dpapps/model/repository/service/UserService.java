@@ -5,7 +5,6 @@ import dpapps.model.User;
 import dpapps.security.userregistration.UserDto;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
 
@@ -64,11 +63,27 @@ public interface UserService {
     /**
      * Returns Users roles
      */
-    Set<Role> getUserRoles(User user);
+    List<Role> getUserRoles(User user);
 
 
     /**
      * Returns Users roles names
      */
-    Set<String> getUserRoleNames(User user);
+    List<String> getUserRoleNames(User user);
+
+    /**
+     * Saves User to the database
+     */
+    void saveUser(User user);
+
+    /**
+     * Returns User based on its ID value
+     */
+    User getUserById(Long id);
+
+    /**
+     * Returns all users
+     */
+    List<User> findAll();
+
 }
