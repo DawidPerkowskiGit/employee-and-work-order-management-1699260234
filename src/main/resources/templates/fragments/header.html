@@ -21,12 +21,12 @@
                 </a></li>
             </div>
 
-            <li><a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{admin/user-management}">Admin
+            <li><a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/user-management}">Admin
                 dashboard</a></li>
 
-            <li><a class="nav-link" sec:authorize="hasRole('ROLE_OPERATOR')" th:href="@{/operator/dashboard}">Operator
+            <li><a class="nav-link" sec:authorize="hasRole('ROLE_OPERATOR')" th:href="@{/operator/panel}">Operator
                 dashboard</a></li>
-            <li><a class="nav-link" sec:authorize="hasRole('ROLE_DESIGNER')" th:href="@{/designer/dashboard}">Designer
+            <li><a class="nav-link" sec:authorize="hasRole('ROLE_DESIGNER')" th:href="@{/designer/panel}">Designer
                 dashboard</a></li>
 
             <li><a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a></li>

@@ -33,7 +33,7 @@ public class AdminManagementServiceImpl implements AdminManagementService {
         model.addAttribute("users", users);
         model.addAttribute("allRoles", allRoles);
 
-        return "user-management";
+        return "/admin/user-management";
     }
 
     @Override
