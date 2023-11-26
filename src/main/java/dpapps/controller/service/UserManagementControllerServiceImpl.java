@@ -6,7 +6,10 @@ import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.VerificationService;
 import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -102,4 +105,14 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
        }
        return "verificationUnsuccessful";
     }
+
+    @Override
+    public String getProfile(Model model) {
+        User user = userService.getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        return "profile";
+    }
+
+
 }
