@@ -8,9 +8,12 @@ import dpapps.model.repository.RoleRepository;
 import dpapps.model.repository.UserRepository;
 import dpapps.security.userregistration.UserDto;
 import dpapps.tools.RoleChecker;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -176,6 +179,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User user = this.findByLogin(username);
+
+
+        return user;
+
     }
 
     private boolean isRoleValid(Role role) {

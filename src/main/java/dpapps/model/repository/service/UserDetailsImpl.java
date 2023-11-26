@@ -15,13 +15,13 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomUserDetails implements UserDetailsService {
+public class UserDetailsImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
 
     @Autowired
-    public CustomUserDetails(UserRepository userRepository) {
+    public UserDetailsImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

@@ -2,6 +2,7 @@ package dpapps.controller.service;
 
 import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -36,4 +37,10 @@ public interface UserManagementControllerService {
      * Attempts to verify the user, returns result view
      */
     String processUserVerification(String code);
+
+
+    /**
+     * Renders User profile view
+     */
+    String getProfile(Model model);
 }

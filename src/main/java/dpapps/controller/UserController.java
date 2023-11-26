@@ -61,5 +61,10 @@ public class UserController {
         return controllerService.processUserVerification(code);
     }
 
+    @GetMapping("/profile")
+    public String getProfile(Model model) {
+        return controllerService.getProfile(model);
+    }
+
 
 }

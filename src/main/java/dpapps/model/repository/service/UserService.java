@@ -3,6 +3,7 @@ package dpapps.model.repository.service;
 import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.security.userregistration.UserDto;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
@@ -85,5 +86,10 @@ public interface UserService {
      * Returns all users
      */
     List<User> findAll();
+
+    /**
+     * Returns currently authenticated user
+     */
+    User getAuthenticatedUser();
 
 }
