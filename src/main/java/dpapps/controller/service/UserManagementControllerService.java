@@ -1,5 +1,6 @@
 package dpapps.controller.service;
 
+import dpapps.model.User;
 import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,4 +44,9 @@ public interface UserManagementControllerService {
      * Renders User profile view
      */
     String getProfile(Model model);
+
+    /**
+     * Updated user profile data
+     */
+    String updateProfile(User updatedUser);
 }

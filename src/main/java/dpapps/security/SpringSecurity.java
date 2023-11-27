@@ -50,6 +50,8 @@ public class SpringSecurity {
                                 .requestMatchers("/operator/**").hasAuthority(RoleConstants.ROLE_OPERATOR)
                                 .requestMatchers("/designer/**").hasAuthority(RoleConstants.ROLE_DESIGNER)
                                 .requestMatchers("/profile/**").authenticated()
+                                .requestMatchers("/updateProfile").authenticated()
+
                 )
                 .formLogin(form -> form
                         .loginPage("/login")

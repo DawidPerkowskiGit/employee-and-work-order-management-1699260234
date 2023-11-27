@@ -1,6 +1,7 @@
 package dpapps.controller;
 
 import dpapps.controller.service.UserManagementControllerService;
+import dpapps.model.User;
 import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
 import jakarta.validation.Valid;
@@ -8,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -64,6 +62,12 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfile(Model model) {
         return controllerService.getProfile(model);
+    }
+
+    @PostMapping("/updateProfile")
+    public String updateProfile(@ModelAttribute User updatedUser) {
+        System.out.println(updatedUser.getId());
+        return this.controllerService.updateProfile(updatedUser);
     }
 
 

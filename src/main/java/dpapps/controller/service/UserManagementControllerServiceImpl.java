@@ -114,5 +114,15 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
         return "profile";
     }
 
+    @Override
+    public String updateProfile(User updatedUser) {
+        User user = userService.getUserById(updatedUser.getId());
+
+        user.setEmail(updatedUser.getEmail());
+
+        userService.saveUser(user);
+        return "redirect:/profile";
+    }
+
 
 }

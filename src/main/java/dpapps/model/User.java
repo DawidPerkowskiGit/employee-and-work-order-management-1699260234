@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -32,7 +33,7 @@ public class User implements DatabaseEntryMarker {
 
     @Column(name = "creation_date")
     @DateTimeFormat(pattern = DateConstants.DATE_FORMAT)
-    private LocalDate creation_date;
+    private LocalDate creationDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -50,6 +51,25 @@ public class User implements DatabaseEntryMarker {
         this.password = password;
         this.email = email;
         this.verified = false;
-        this.creation_date = LocalDate.now();
+        this.creationDate = LocalDate.now();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, email, verified, creationDate);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        User otherUser = (User) obj;
+
+        return Objects.equals(id, otherUser.id) &&
+                Objects.equals(login, otherUser.login) &&
+                Objects.equals(email, otherUser.email) &&
+                Objects.equals(verified, otherUser.verified) &&
+                Objects.equals(creationDate, otherUser.creationDate);
     }
 }
