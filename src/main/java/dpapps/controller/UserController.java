@@ -66,7 +66,6 @@ public class UserController {
 
     @PostMapping("/updateProfile")
     public String updateProfile(@ModelAttribute User updatedUser) {
-        System.out.println(updatedUser.getId());
         return this.controllerService.updateProfile(updatedUser);
     }
 

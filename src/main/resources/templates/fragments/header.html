@@ -37,11 +37,47 @@
 
             <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/profile}">Profile</a></li>
 
-            <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
-
+            <li><a class="nav-link" id="logoutLink" sec:authorize="isAuthenticated()" th:href="@{#}">Logout</a></li>
 
         </ul>
+
+
     </div>
+    <div class="modal" tabindex="-1" role="dialog" id="logoutModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Logout Confirmation</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="buttonCancel">Cancel
+                    </button>
+                    <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var btnLogout = document.getElementById("logoutLink");
+
+        var btnCancel = document.getElementById("buttonCancel")
+
+        var modal = document.getElementById("logoutModal");
+
+
+        btnLogout.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        btnCancel.onclick = function () {
+            modal.style.display = "none";
+        }
+    </script>
 </nav>
 </body>
 </html>
