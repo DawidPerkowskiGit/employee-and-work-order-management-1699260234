@@ -61,7 +61,9 @@ public class SpringSecurity {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll())
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+                        .logoutSuccessUrl("/login?logout")
+                )
                 .sessionManagement((sessionManagement) ->
                         sessionManagement
                                 .sessionConcurrency((sessionConcurrency) ->
