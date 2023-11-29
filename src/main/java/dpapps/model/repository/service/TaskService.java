@@ -56,4 +56,14 @@ public interface TaskService {
      * Persists the Task
      */
     boolean add(Task task);
+
+    /**
+     * Deletes task by Id
+     */
+    boolean delete(Long id);
+
+    /**
+     * Deletes all tasks by name
+     */
+    boolean deleteAllByName(String name);
 }
