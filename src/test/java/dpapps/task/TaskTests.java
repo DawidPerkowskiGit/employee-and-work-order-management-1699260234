@@ -62,7 +62,7 @@ public class TaskTests {
                 )
                 .andExpect(redirectedUrl("/operator/add-task?success"));
 
-//        this.cleanupTestUsers();
+        this.cleanupTestUsers();
 
     }
 
