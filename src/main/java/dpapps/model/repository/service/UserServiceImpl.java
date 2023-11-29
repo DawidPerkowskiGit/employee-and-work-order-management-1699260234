@@ -8,7 +8,6 @@ import dpapps.model.repository.RoleRepository;
 import dpapps.model.repository.UserRepository;
 import dpapps.security.userregistration.UserDto;
 import dpapps.tools.RoleChecker;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -91,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public String add(UserDto userDto) {
-        User user = new User(userDto.getLogin(), passwordEncoder.encode(userDto.getPassword()), userDto.getEmail());
+        User user = new User(userDto.getLogin(), passwordEncoder.encode(userDto.getPassword()), userDto.getEmail(), userDto.getName());
         return this.add(user);
     }
 
@@ -193,6 +192,18 @@ public class UserServiceImpl implements UserService {
 
         return user;
 
+    }
+
+    @Override
+    public List<User> findAllByRole(String roleName) {
+        Role role = this.roleRepository.findByName(roleName);
+        return this.userRepository.findAllByRoles(role);
+    }
+
+    @Override
+    public List<User> findAllByRole(Long id) {
+        Role role = this.roleRepository.findById(id).get();
+        return this.userRepository.findAllByRoles(role);
     }
 
     private boolean isRoleValid(Role role) {

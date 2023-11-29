@@ -16,14 +16,14 @@
         </div>
         <ul class="nav navbar-nav">
             <div sec:authorize="isAuthenticated()">
-                <li><a class="detail">
-                    Logged user: <span sec:authentication="name"></span>
+                <li><a style="font-weight: bold; color: chocolate">
+                    User: <span sec:authentication="name"></span>
                     <br>
                     Roles: <span sec:authentication="principal.authorities"></span>
                 </a></li>
             </div>
 
-            <li><a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/user-management}">Admin
+            <li><a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/panel}">Admin
                 dashboard</a></li>
 
             <li><a class="nav-link" sec:authorize="hasRole('ROLE_OPERATOR')" th:href="@{/operator/panel}">Operator

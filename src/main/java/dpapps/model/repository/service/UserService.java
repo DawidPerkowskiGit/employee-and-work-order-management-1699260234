@@ -3,7 +3,6 @@ package dpapps.model.repository.service;
 import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.security.userregistration.UserDto;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
@@ -91,5 +90,15 @@ public interface UserService {
      * Returns currently authenticated user
      */
     User getAuthenticatedUser();
+
+    /**
+     * Returns Users based on their role name
+     */
+    List<User> findAllByRole(String roleName);
+
+    /**
+     * Returns Users based on their role id
+     */
+    List<User> findAllByRole(Long id);
 
 }

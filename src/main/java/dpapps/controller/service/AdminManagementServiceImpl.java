@@ -26,7 +26,7 @@ public class AdminManagementServiceImpl implements AdminManagementService {
 
 
     @Override
-    public String listUsers(Model model) {
+    public String getUserManagement(Model model) {
         List<User> users = userService.findAll();
         List<Role> allRoles = roleService.findAll();
 
@@ -47,5 +47,10 @@ public class AdminManagementServiceImpl implements AdminManagementService {
         userService.saveUser(user);
 
         return "redirect:/admin/user-management";
+    }
+
+    @Override
+    public String getAdminPanel() {
+        return "/admin/panel";
     }
 }

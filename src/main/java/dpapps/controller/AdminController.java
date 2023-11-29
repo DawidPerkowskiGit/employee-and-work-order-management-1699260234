@@ -21,9 +21,14 @@ public class AdminController {
         this.controllerService = controllerService;
     }
 
+    @GetMapping("/admin/panel")
+    public String getAdminPanel(){
+        return controllerService.getAdminPanel();
+    }
+
     @GetMapping("/admin/user-management")
     public String getAdminDashboard(Model model) {
-        return controllerService.listUsers(model);
+        return controllerService.getUserManagement(model);
     }
 
     @PostMapping("/admin/assignRoles")
