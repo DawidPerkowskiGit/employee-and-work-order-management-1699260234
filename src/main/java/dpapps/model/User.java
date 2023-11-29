@@ -35,6 +35,9 @@ public class User implements DatabaseEntryMarker {
     @DateTimeFormat(pattern = DateConstants.DATE_FORMAT)
     private LocalDate creationDate;
 
+    @Column(name = "name")
+    private String name;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -52,6 +55,15 @@ public class User implements DatabaseEntryMarker {
         this.email = email;
         this.verified = false;
         this.creationDate = LocalDate.now();
+    }
+
+    public User(String login, String password, String email, String name) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.verified = false;
+        this.creationDate = LocalDate.now();
+        this.name = name;
     }
 
     @Override

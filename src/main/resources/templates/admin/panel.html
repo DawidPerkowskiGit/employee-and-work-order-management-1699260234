@@ -16,23 +16,17 @@
 <br/><br/>
 <div class="container">
     <div class="row">
-        <h1 class="text-center"> Operator panel. </h1>
-
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="card" style="width: 16rem; height: 16rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Create new task</h5>
-                    <p class="card-text">Select a project, define task name and details. Choose programming language and assign designer to the task.</p>
-                    <a th:href="@{/operator/add-task}" class="btn btn-primary" style="bottom: 5px">Create new task</a>
-                </div>
+        <h1 class="text-center"> Admin panel. </h1>
+        <div class="card" style="width: 16rem; height: 16rem;">
+            <div class="card-body">
+                <h5 class="card-title">Assign user roles</h5>
+                <p class="card-text">Grant new, remove and edit all system users roles.</p>
+                <a th:href="@{/admin/user-management}" class="btn btn-primary" style="bottom: 5px">Assign roles</a>
             </div>
         </div>
+
     </div>
 </div>
-
-
 <footer class="footer" style="position: fixed; bottom: 0">
     <div class="container">
         <div class="text-muted" th:replace="~{fragments/footer :: footer}"></div>

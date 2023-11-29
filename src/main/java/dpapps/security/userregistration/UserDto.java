@@ -20,6 +20,10 @@ public class UserDto {
     private String login;
     @NotEmpty(message = "Password should not be empty")
     private String password;
+    @NotEmpty(message = "Your name should not be empty")
+    private String name;
     @NotEmpty(message = "Email should not be empty")
     private String email;
+
+
 }
