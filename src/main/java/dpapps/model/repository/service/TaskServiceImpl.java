@@ -40,12 +40,12 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public Task findByTaskId(Long taskId) {
+    public Task findByTaskId(String taskId) {
         return this.taskRepository.findByTaskId(taskId);
     }
 
     @Override
-    public boolean existsByTaskId(Long id) {
+    public boolean existsByTaskId(String id) {
         return this.taskRepository.existsByTaskId(id);
     }
 
