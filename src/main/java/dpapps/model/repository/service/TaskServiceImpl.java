@@ -71,4 +71,30 @@ public class TaskServiceImpl implements TaskService{
         }
         return false;
     }
+
+    @Override
+    public boolean delete(Long id) {
+        try {
+            this.taskRepository.deleteById(id);
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println("Could not remove task from the database");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllByName(String name) {
+        try {
+            this.taskRepository.deleteAllByName(name);
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println("Could not delete task by specified name");
+            e.printStackTrace();
+        }
+        return true;
+    }
 }
