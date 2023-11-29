@@ -32,13 +32,13 @@ public interface TaskService {
     /**
      * Returns Task based on task_id value
      */
-    Task findByTaskId(Long taskId);
+    Task findByTaskId(String taskId);
 
     /**
      * Find if Task exists based on task_id
      */
 
-    boolean existsByTaskId(Long id);
+    boolean existsByTaskId(String id);
 
     /**
      * Returns all Tasks related to a Project

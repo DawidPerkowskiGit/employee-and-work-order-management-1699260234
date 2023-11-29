@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Entity
@@ -33,8 +35,9 @@ public class Task implements DatabaseEntryMarker {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "task_id", unique = true)
-    private Long taskId;
+    private String taskId;
 
     public Task() {
+        taskId = UUID.randomUUID().toString();
     }
 }
