@@ -1,5 +1,6 @@
 package dpapps.model.repository.service;
 
+import dpapps.exception.RoleNotFoundException;
 import dpapps.model.Role;
 import dpapps.model.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,28 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findAll() {
         return this.roleRepository.findAll();
+    }
+
+    @Override
+    public Role getRoleByName(String name) {
+        try {
+           return roleRepository.findByName(name).orElseThrow(() -> new RoleNotFoundException());
+        }
+        catch (RoleNotFoundException e) {
+            //TODO logger
+        }
+        return new Role();
+    }
+
+    @Override
+    public Role getRoleById(Long id) {
+        try {
+            return roleRepository.findById(id).orElseThrow(() -> new RoleNotFoundException());
+        }
+        catch (RoleNotFoundException e) {
+            //TODO logger
+        }
+        return new Role();
     }
 
 

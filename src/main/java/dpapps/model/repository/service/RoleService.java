@@ -31,4 +31,14 @@ public interface RoleService {
      */
     List<Role> findAll();
 
+    /**
+     * Gets role by name
+     */
+    Role getRoleByName(String name);
+
+    /**
+     * Gets role by id
+     */
+    Role getRoleById(Long id);
+
 }

@@ -17,15 +17,13 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
     private final UserService userService;
     private final VerificationService verificationService;
-    private final UserRepository userRepository;
     private final UserManagementTemplateService templateService;
 
 
     public UserManagementControllerServiceImpl(UserService userService, VerificationService verificationService,
-                                               UserRepository userRepository, UserManagementTemplateService templateService) {
+                                                UserManagementTemplateService templateService) {
         this.userService = userService;
         this.verificationService = verificationService;
-        this.userRepository = userRepository;
         this.templateService = templateService;
     }
 
@@ -57,7 +55,7 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     }
 
     private void setupVerification(String login) {
-        User user = userRepository.findByLogin(login);
+        User user = userService.findByLogin(login);
         String verificationCode = this.verificationService.generateVerificationCode();
         this.verificationService.assignVerificationCodeToUser(user, verificationCode);
         this.verificationService.sendVerificationEmail(user, verificationCode);

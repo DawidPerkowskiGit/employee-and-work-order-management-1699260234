@@ -6,12 +6,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface VerificationRepository extends JpaRepository<Verification, Long> {
 
-    Verification findByCode(String code);
+    Optional<Verification> findByCode(String code);
 
-    Verification findByUser(User user);
+    Optional<Verification> findByUser(User user);
 
     @Transactional
     void deleteByCode(String code);

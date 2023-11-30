@@ -1,14 +1,14 @@
 package dpapps.model.repository.service;
 
+import dpapps.exception.ProjectNotFoundException;
 import dpapps.model.Project;
 import dpapps.model.repository.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProjectServiceImpl implements ProjectService{
+public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
 
@@ -30,7 +30,13 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Project findByName(String name) {
-        return this.projectRepository.findByName(name);
+        try {
+            projectRepository.findByName(name).orElseThrow(() -> new ProjectNotFoundException());
+        }
+        catch (ProjectNotFoundException e) {
+            //TODO logger
+        }
+        return new Project();
     }
 
     @Override
@@ -43,8 +49,7 @@ public class ProjectServiceImpl implements ProjectService{
         try {
             this.projectRepository.save(project);
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Could not new Project to a database");
             e.printStackTrace();
         }

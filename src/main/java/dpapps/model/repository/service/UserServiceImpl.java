@@ -2,13 +2,13 @@ package dpapps.model.repository.service;
 
 import dpapps.constants.UserMessagesConstants;
 import dpapps.exception.InvalidRoleNameException;
+import dpapps.exception.RoleNotFoundException;
+import dpapps.exception.UserNotFoundException;
 import dpapps.model.Role;
 import dpapps.model.User;
-import dpapps.model.repository.RoleRepository;
 import dpapps.model.repository.UserRepository;
 import dpapps.security.userregistration.UserDto;
 import dpapps.tools.RoleChecker;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
@@ -24,14 +24,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+    //    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
 
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                           RoleRepository roleRepository) {
+                           RoleService roleService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     public List<User> list() {
@@ -81,12 +82,26 @@ public class UserServiceImpl implements UserService {
     }
 
     public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
+        try {
+            return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException());
+        }
+        catch (UserNotFoundException e) {
+            //TODO logger
+
+        }
+        return new User();
     }
 
     @Override
     public User findByLoginAndEmail(String login, String email) {
-        return userRepository.findByLoginAndEmail(login, email);
+        try {
+            return userRepository.findByLoginAndEmail(login, email).orElseThrow(() -> new UserNotFoundException());
+        }
+        catch (UserNotFoundException e) {
+            //TODO logger
+
+        }
+        return new User();
     }
 
     public String add(UserDto userDto) {
@@ -139,7 +154,7 @@ public class UserServiceImpl implements UserService {
         if (!this.isRoleValid(roleName)) {
             return false;
         }
-        Role role = roleRepository.findByName(roleName);
+        Role role = this.roleService.getRoleByName(roleName);
         return this.grantUserRole(user, role);
     }
 
@@ -194,13 +209,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAllByRole(String roleName) {
-        Role role = this.roleRepository.findByName(roleName);
+        Role role = this.roleService.getRoleByName(roleName);
         return this.userRepository.findAllByRoles(role);
     }
 
     @Override
     public List<User> findAllByRole(Long id) {
-        Role role = this.roleRepository.findById(id).get();
+        Role role = this.roleService.getRoleById(id);
         return this.userRepository.findAllByRoles(role);
     }
 
