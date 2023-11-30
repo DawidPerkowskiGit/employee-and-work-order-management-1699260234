@@ -14,7 +14,6 @@ public class OperatorController {
 
     private final OperatorControllerService controllerService;
 
-    @Autowired
     public OperatorController(OperatorControllerService controllerService) {
         this.controllerService = controllerService;
     }

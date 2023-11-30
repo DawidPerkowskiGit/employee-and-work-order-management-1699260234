@@ -18,7 +18,7 @@ public class AdminManagementServiceImpl implements AdminManagementService {
 
     private final RoleService roleService;
 
-    @Autowired
+
     public AdminManagementServiceImpl(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;

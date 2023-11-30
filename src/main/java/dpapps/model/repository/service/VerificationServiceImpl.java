@@ -18,7 +18,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     private final EmailService emailService;
 
-    @Autowired
+
     public VerificationServiceImpl(VerificationRepository verificationRepository,
                                    UserRepository userRepository, EmailService emailService) {
         this.verificationRepository = verificationRepository;

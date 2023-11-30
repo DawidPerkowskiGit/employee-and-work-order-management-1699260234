@@ -23,7 +23,7 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
 
     private final TaskService taskService;
 
-    @Autowired
+
     public OperatorControllerServiceImpl(ProjectService projectService, CodingLanguageService codingLanguageService, UserService userService, TaskService taskService) {
         this.projectService = projectService;
         this.codingLanguageService = codingLanguageService;

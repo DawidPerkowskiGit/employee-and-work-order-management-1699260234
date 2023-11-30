@@ -10,7 +10,7 @@ public class DesignerController {
 
     private final DesignerControllerService controllerService;
 
-    @Autowired
+
     public DesignerController(DesignerControllerService controllerService) {
         this.controllerService = controllerService;
     }

@@ -22,7 +22,7 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     private final VerificationService verificationService;
     private final UserRepository userRepository;
 
-    @Autowired
+
     public UserManagementControllerServiceImpl(UserService userService, VerificationService verificationService,
                                                UserRepository userRepository) {
         this.userService = userService;
