@@ -1,15 +1,13 @@
 package dpapps.controller.service;
 
+import dpapps.controller.service.templateservice.UserManagementTemplateService;
+import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
 import dpapps.model.User;
 import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.VerificationService;
 import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,22 +16,24 @@ import org.springframework.validation.BindingResult;
 public class UserManagementControllerServiceImpl implements UserManagementControllerService {
 
     private final UserService userService;
-
     private final VerificationService verificationService;
     private final UserRepository userRepository;
+    private final UserManagementTemplateService templateService;
 
 
     public UserManagementControllerServiceImpl(UserService userService, VerificationService verificationService,
-                                               UserRepository userRepository) {
+                                               UserRepository userRepository, UserManagementTemplateService templateService) {
         this.userService = userService;
         this.verificationService = verificationService;
         this.userRepository = userRepository;
+        this.templateService = templateService;
     }
 
     public String register(Model model) {
         UserDto user = new UserDto();
         model.addAttribute("user", user);
-        return "register";
+
+        return templateService.getRegisterView(model);
     }
 
     public String processRegister(UserDto userDto, BindingResult result, Model model) {
@@ -45,7 +45,7 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
-            return "/register";
+            return templateService.getRegisterView(model);
         }
 
 
@@ -53,7 +53,7 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
         this.setupVerification(userDto.getLogin());
 
-        return "afterregistration";
+        return templateService.getAfterRegistrationView();
     }
 
     private void setupVerification(String login) {
@@ -64,14 +64,14 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     }
 
     public String processLogin() {
-        return "login";
+        return templateService.getLoginView();
     }
 
     @Override
     public String changePassword(Model model) {
-        ChangePasswordDto userpass = new ChangePasswordDto();
-        model.addAttribute("userpass", userpass);
-        return "changepass";
+        ChangePasswordDto userPassword = new ChangePasswordDto();
+        model.addAttribute("userpass", userPassword);
+        return templateService.getChangePasswordView(model);
     }
 
     @Override
@@ -92,18 +92,20 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
         if (result.hasErrors()) {
             model.addAttribute("userpass", dto);
-            return "/changepass";
+            return templateService.getChangePasswordView(model);
         }
-        return "index";
+        return templateService.getIndexView();
     }
 
     @Override
-    public String processUserVerification(String code) {
+    public String processUserVerification(String code, Model model) {
        boolean result = verificationService.processVerification(code);
        if (result) {
-           return "verificationSuccessful";
+           model.addAttribute("successMessage", "Account verification was successful!");
+           return this.templateService.getVerificationResultView();
        }
-       return "verificationUnsuccessful";
+       model.addAttribute("errorMessage", "Your account could not be verified");
+       return this.templateService.getVerificationResultView();
     }
 
     @Override
@@ -111,17 +113,27 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
         User user = userService.getAuthenticatedUser();
         model.addAttribute("user", user);
 
-        return "profile";
+        return templateService.getUserProfileView(model);
     }
 
     @Override
-    public String updateProfile(User updatedUser) {
+    public String updateProfile(User updatedUser, Model model) {
         User user = userService.getUserById(updatedUser.getId());
-
         user.setEmail(updatedUser.getEmail());
+        user.setName(updatedUser.getName());
 
-        userService.saveUser(user);
-        return "redirect:/profile";
+        try {
+            userService.saveUser(user);
+            model.addAttribute("successMessage", "Your profile was updated successfully!");
+        }
+        catch (UserCouldNotBeSavedInTheDatabaseException e) {
+            //logger needed
+            System.out.println("Could not update your profile");
+            model.addAttribute("errorMessage", "Could not update your profile");
+        }
+
+
+        return templateService.getUserProfileView(model);
     }
 
 

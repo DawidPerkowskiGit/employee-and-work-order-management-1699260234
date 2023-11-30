@@ -1,5 +1,6 @@
 package dpapps.controller.service;
 
+import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
 import org.springframework.ui.Model;
 
 import java.util.List;

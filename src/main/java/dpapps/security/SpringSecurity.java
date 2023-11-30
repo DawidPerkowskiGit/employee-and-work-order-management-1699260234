@@ -46,6 +46,7 @@ public class SpringSecurity {
                                 .requestMatchers("/health").permitAll()
                                 .requestMatchers("/changepass/**").permitAll()
                                 .requestMatchers("/verify/**").permitAll()
+                                .requestMatchers("/verification-result").permitAll()
                                 .requestMatchers("/admin/**").hasAuthority(RoleConstants.ROLE_ADMIN)
                                 .requestMatchers("/operator/**").hasAuthority(RoleConstants.ROLE_OPERATOR)
                                 .requestMatchers("/designer/**").hasAuthority(RoleConstants.ROLE_DESIGNER)

@@ -1,5 +1,6 @@
 package dpapps.controller.service;
 
+import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
 import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.model.repository.service.RoleService;
@@ -39,12 +40,15 @@ public class AdminManagementServiceImpl implements AdminManagementService {
     @Override
     public String assignRoles(Long userId, List<Long> selectedRoles) {
         User user = userService.getUserById(userId);
-
         List<Role> roles = roleService.getRolesById(selectedRoles);
-
         user.setRoles(new ArrayList<>(roles));
 
-        userService.saveUser(user);
+        try {
+            userService.saveUser(user);
+        }
+        catch (UserCouldNotBeSavedInTheDatabaseException e) {
+            //TODO
+        }
 
         return "redirect:/admin/user-management";
     }

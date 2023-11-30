@@ -1,5 +1,6 @@
 package dpapps.controller.service;
 
+import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
 import dpapps.model.User;
 import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
@@ -37,7 +38,7 @@ public interface UserManagementControllerService {
     /**
      * Attempts to verify the user, returns result view
      */
-    String processUserVerification(String code);
+    String processUserVerification(String code, Model model);
 
 
     /**
@@ -48,5 +49,5 @@ public interface UserManagementControllerService {
     /**
      * Updated user profile data
      */
-    String updateProfile(User updatedUser);
+    String updateProfile(User updatedUser, Model model);
 }

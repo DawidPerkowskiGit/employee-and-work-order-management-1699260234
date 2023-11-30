@@ -122,8 +122,6 @@ public class UserServiceImpl implements UserService {
 
         try {
             List<Role> userRoles = this.getUserRoles(user);
-
-
             userRoles.add(role);
             user.setRoles(userRoles);
             userRepository.save(user);
