@@ -10,7 +10,7 @@ import java.util.List;
 public class AdminTemplateServiceImpl implements AdminTemplateService{
     @Override
     public String getUserManagementView(Model model) {
-        return "/admin/user-management";
+        return "admin/user-management";
     }
 
     @Override
@@ -25,6 +25,6 @@ public class AdminTemplateServiceImpl implements AdminTemplateService{
 
     @Override
     public String getAdminPanel() {
-        return "/admin/panel";
+        return "admin/panel";
     }
 }
