@@ -1,12 +1,14 @@
 package dpapps.controller.service;
 
+import dpapps.controller.service.templateservice.AdminTemplateService;
+import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
 import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.model.repository.service.RoleService;
 import dpapps.model.repository.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +20,13 @@ public class AdminManagementServiceImpl implements AdminManagementService {
 
     private final RoleService roleService;
 
-    @Autowired
-    public AdminManagementServiceImpl(UserService userService, RoleService roleService) {
+    private final AdminTemplateService templateService;
+
+
+    public AdminManagementServiceImpl(UserService userService, RoleService roleService, AdminTemplateService templateService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.templateService = templateService;
     }
 
 
@@ -33,24 +38,31 @@ public class AdminManagementServiceImpl implements AdminManagementService {
         model.addAttribute("users", users);
         model.addAttribute("allRoles", allRoles);
 
-        return "/admin/user-management";
+        return templateService.getUserManagementView(model);
     }
 
     @Override
-    public String assignRoles(Long userId, List<Long> selectedRoles) {
+    public String assignRoles(Long userId, List<Long> selectedRoles, RedirectAttributes redirectAttributes) {
         User user = userService.getUserById(userId);
-
         List<Role> roles = roleService.getRolesById(selectedRoles);
-
         user.setRoles(new ArrayList<>(roles));
 
-        userService.saveUser(user);
-
-        return "redirect:/admin/user-management";
+        try {
+            userService.saveUser(user);
+            redirectAttributes.addFlashAttribute("successMessage", "Roles updated successfully!");
+            return this.templateService.getAssignRolesSuccessfulView(userId, selectedRoles, redirectAttributes);
+        }
+        catch (UserCouldNotBeSavedInTheDatabaseException e) {
+            //TODO
+            // add logger
+            System.out.println("Error adding task. Please try again.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Could not update the roles. Please try again.");
+        }
+        return this.templateService.getAssignRolesUnsuccessfulView(userId, selectedRoles, redirectAttributes);
     }
 
     @Override
     public String getAdminPanel() {
-        return "/admin/panel";
+        return templateService.getAdminPanel();
     }
 }

@@ -11,7 +11,6 @@ public class MainAppController {
 
     private final MainAppControllerService controllerService;
 
-    @Autowired
     MainAppController(MainAppControllerService controllerService) {
         this.controllerService = controllerService;
     }

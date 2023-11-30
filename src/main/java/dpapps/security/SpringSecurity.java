@@ -24,7 +24,7 @@ public class SpringSecurity {
 
     private final UserDetailsService userDetailsService;
 
-    @Autowired
+
     public SpringSecurity(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
@@ -46,6 +46,7 @@ public class SpringSecurity {
                                 .requestMatchers("/health").permitAll()
                                 .requestMatchers("/changepass/**").permitAll()
                                 .requestMatchers("/verify/**").permitAll()
+                                .requestMatchers("/verification-result").permitAll()
                                 .requestMatchers("/admin/**").hasAuthority(RoleConstants.ROLE_ADMIN)
                                 .requestMatchers("/operator/**").hasAuthority(RoleConstants.ROLE_OPERATOR)
                                 .requestMatchers("/designer/**").hasAuthority(RoleConstants.ROLE_DESIGNER)
@@ -75,7 +76,7 @@ public class SpringSecurity {
         return http.build();
     }
 
-    @Autowired
+
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }

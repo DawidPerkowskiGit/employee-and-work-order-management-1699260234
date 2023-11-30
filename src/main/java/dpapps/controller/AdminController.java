@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -16,7 +17,6 @@ public class AdminController {
     private final AdminManagementService controllerService;
 
 
-    @Autowired
     public AdminController(AdminManagementService controllerService) {
         this.controllerService = controllerService;
     }
@@ -32,7 +32,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/assignRoles")
-    public String assignRoles(@RequestParam Long userId, @RequestParam List<Long> selectedRoles) {
-        return controllerService.assignRoles(userId, selectedRoles);
+    public String assignRoles(@RequestParam Long userId, @RequestParam List<Long> selectedRoles, RedirectAttributes redirectAttributes) {
+        return controllerService.assignRoles(userId, selectedRoles, redirectAttributes);
     }
 }

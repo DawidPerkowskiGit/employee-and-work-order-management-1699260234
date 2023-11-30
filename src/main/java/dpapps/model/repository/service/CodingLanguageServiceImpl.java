@@ -13,7 +13,7 @@ public class CodingLanguageServiceImpl implements CodingLanguageService{
 
     private final CodingLanguageRepository codingLanguageRepository;
 
-    @Autowired
+
     public CodingLanguageServiceImpl(CodingLanguageRepository codingLanguageRepository) {
         this.codingLanguageRepository = codingLanguageRepository;
     }

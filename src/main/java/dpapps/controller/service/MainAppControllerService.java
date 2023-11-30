@@ -7,12 +7,15 @@ public interface MainAppControllerService {
     /**
      * Returns health status of application
      */
-    public String getHealthCheck();
+    String getHealthCheck();
 
     /**
      * Returns homepage view
      */
-    public String getHomePage();
+    String getHomePage();
 
+    /**
+     * Returns expired URL view
+     */
     String expiredUrl();
 }

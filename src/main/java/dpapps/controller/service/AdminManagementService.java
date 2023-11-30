@@ -1,6 +1,8 @@
 package dpapps.controller.service;
 
+import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ public interface AdminManagementService {
     /**
      * Update user roles
      */
-    String assignRoles(Long userId, List<Long> selectedRoles);
+    String assignRoles(Long userId, List<Long> selectedRoles, RedirectAttributes redirectAttributes);
 
     /**
      * Renders admin panel

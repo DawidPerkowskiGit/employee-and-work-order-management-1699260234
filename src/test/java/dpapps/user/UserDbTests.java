@@ -3,7 +3,6 @@ package dpapps.user;
 import dpapps.constants.UserMessagesConstants;
 import dpapps.model.User;
 import dpapps.model.Verification;
-import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.VerificationRepository;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.VerificationService;
@@ -31,8 +30,7 @@ public class UserDbTests {
     private final String[] userData = {"testlogin", "testpassword", "testemail"};
 
     private final User user = new User(userData[0], userData[1], userData[2]);
-    @Autowired
-    private UserRepository userRepository;
+
 
     @Autowired
     public UserDbTests(UserService userService, PasswordEncoder passwordEncoder, VerificationService verificationService, VerificationRepository verificationRepository) {
@@ -145,8 +143,7 @@ public class UserDbTests {
         try {
 
             return userService.delete(userData[0]);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("could not remove testing user");
             e.printStackTrace();
         }

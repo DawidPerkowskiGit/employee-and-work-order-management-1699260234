@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserManagementControllerService controllerService;
 
-    @Autowired
+
     public UserController(UserManagementControllerService controllerService) {
         this.controllerService = controllerService;
     }
@@ -55,8 +55,8 @@ public class UserController {
     }
 
     @GetMapping("/verify/{code}")
-    public String verifyUser(@PathVariable String code) {
-        return controllerService.processUserVerification(code);
+    public String verifyUser(@PathVariable String code, Model model) {
+        return controllerService.processUserVerification(code, model);
     }
 
     @GetMapping("/profile")
@@ -65,8 +65,8 @@ public class UserController {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@ModelAttribute User updatedUser) {
-        return this.controllerService.updateProfile(updatedUser);
+    public String updateProfile(@ModelAttribute User updatedUser, Model model) {
+        return this.controllerService.updateProfile(updatedUser, model);
     }
 
 

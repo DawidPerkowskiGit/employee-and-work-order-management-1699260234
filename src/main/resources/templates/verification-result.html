@@ -16,7 +16,13 @@
 <br/><br/>
 <div class="container">
     <div class="row">
-        <h1 class="text-center"> Verification successful! </h1>
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <strong th:text="${successMessage}"></strong>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <strong th:text="${errorMessage}"></strong>
+        </div>
 
     </div>
 </div>

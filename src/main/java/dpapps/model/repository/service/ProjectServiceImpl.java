@@ -12,7 +12,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     private final ProjectRepository projectRepository;
 
-    @Autowired
+
     public ProjectServiceImpl(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }

@@ -1,5 +1,6 @@
 package dpapps.model.repository.service;
 
+import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
 import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.security.userregistration.UserDto;
@@ -74,7 +75,7 @@ public interface UserService {
     /**
      * Saves User to the database
      */
-    void saveUser(User user);
+    void saveUser(User user) throws UserCouldNotBeSavedInTheDatabaseException;
 
     /**
      * Returns User based on its ID value

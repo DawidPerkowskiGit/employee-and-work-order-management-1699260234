@@ -19,6 +19,7 @@ public class EmailSenderTests {
     private final String emailText = "Test content of email sending service";
 
 
+
     @Autowired
     public EmailSenderTests(EmailService emailService) {
         this.emailService = emailService;

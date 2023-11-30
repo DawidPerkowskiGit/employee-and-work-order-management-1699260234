@@ -14,7 +14,7 @@ public class TaskServiceImpl implements TaskService{
 
     private final TaskRepository taskRepository;
 
-    @Autowired
+
     public TaskServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
