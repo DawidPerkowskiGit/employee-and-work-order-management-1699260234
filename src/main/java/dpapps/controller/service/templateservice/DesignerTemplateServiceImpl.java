@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 public class DesignerTemplateServiceImpl implements DesignerTemplateService{
     @Override
     public String getDesignerPanelView() {
-        return "/designer/panel";
+        return "designer/panel";
     }
 }

@@ -9,12 +9,12 @@ public class OperatorTemplateServiceImpl implements OperatorTemplateService{
 
     @Override
     public String getOperatorPanelView() {
-        return "/operator/panel";
+        return "operator/panel";
     }
 
     @Override
     public String getNewTaskView(Model model) {
-        return "/operator/add-task";
+        return "operator/add-task";
     }
 
     @Override
