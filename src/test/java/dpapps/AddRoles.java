@@ -48,21 +48,21 @@ public class AddRoles {
     @Disabled
     @Test
     public void grantAdminRole() {
-        User user = userRepository.findByLogin("admin");
+        User user = userRepository.findByLogin("admin").get();
         userService.grantUserRole(user, RoleConstants.ROLE_ADMIN);
     }
 
     @Disabled
     @Test
     public void grantOperatorRole() {
-        User user = userRepository.findByLogin("operator");
+        User user = userRepository.findByLogin("operator").get();
         userService.grantUserRole(user, RoleConstants.ROLE_OPERATOR);
     }
 
     @Disabled
     @Test
     public void grantDesignerRole() {
-        User user = userRepository.findByLogin("designer");
+        User user = userRepository.findByLogin("designer").get();
         userService.grantUserRole(user, RoleConstants.ROLE_DESIGNER);
     }
 

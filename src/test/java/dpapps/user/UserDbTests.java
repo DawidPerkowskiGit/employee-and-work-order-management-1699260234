@@ -109,7 +109,7 @@ public class UserDbTests {
         boolean verifiedBefore = user.getVerified();
 
         this.setupVerification(userData[0]);
-        Verification verification = verificationRepository.findByUser(user);
+        Verification verification = verificationRepository.findByUser(user).get();
         String code = verification.getCode();
 
         boolean result = verificationService.processVerification(code);
@@ -129,7 +129,7 @@ public class UserDbTests {
         boolean verifiedBefore = user.getVerified();
 
         this.setupVerification(userData[0]);
-        Verification verification = verificationRepository.findByUser(user);
+        Verification verification = verificationRepository.findByUser(user).get();
         String code = verification.getCode() + "invalid";
 
         boolean result = verificationService.processVerification(code);
@@ -158,7 +158,7 @@ public class UserDbTests {
 
         try {
             User user = userService.findByLogin(userData[0]);
-            Verification verification = verificationRepository.findByUser(user);
+            Verification verification = verificationRepository.findByUser(user).get();
             verificationRepository.deleteByCode(verification.getCode());
         } catch (Exception e) {
             System.out.println("Verification repository cleanup failed");

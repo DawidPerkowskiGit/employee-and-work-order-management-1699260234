@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface CodingLanguageRepository extends JpaRepository<CodingLanguage, Long> {
-    CodingLanguage findByName(String name);
+    Optional<CodingLanguage> findByName(String name);
 
     boolean existsByName(String name);
 }

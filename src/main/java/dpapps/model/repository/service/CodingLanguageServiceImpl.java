@@ -1,5 +1,6 @@
 package dpapps.model.repository.service;
 
+import dpapps.exception.CodingLanguageNotFoundException;
 import dpapps.model.CodingLanguage;
 import dpapps.model.Project;
 import dpapps.model.repository.CodingLanguageRepository;
@@ -30,7 +31,13 @@ public class CodingLanguageServiceImpl implements CodingLanguageService{
 
     @Override
     public CodingLanguage findByName(String name) {
-        return this.codingLanguageRepository.findByName(name);
+        try {
+            return codingLanguageRepository.findByName(name).orElseThrow(() -> new CodingLanguageNotFoundException());
+        }
+        catch (CodingLanguageNotFoundException e) {
+            //TODO logger
+        }
+        return new CodingLanguage();
     }
 
     @Override

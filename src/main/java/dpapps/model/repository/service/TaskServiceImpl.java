@@ -31,7 +31,10 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public Task findByName(String name) {
-        return this.taskRepository.findByName(name);
+        if (this.existsByName(name)) {
+            return this.taskRepository.findByName(name).get();
+        }
+        return new Task();
     }
 
     @Override
@@ -41,7 +44,10 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public Task findByTaskId(String taskId) {
-        return this.taskRepository.findByTaskId(taskId);
+        if (this.existsByTaskId(taskId)) {
+            return this.taskRepository.findByTaskId(taskId).get();
+        }
+        return new Task();
     }
 
     @Override

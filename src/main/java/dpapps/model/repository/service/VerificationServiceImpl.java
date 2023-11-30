@@ -56,12 +56,9 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public boolean processVerification(String code) {
        try {
-           Verification verification = verificationRepository.findByCode(code);
-           if (verification == null) {
-               throw new VerificationCodeNotFoundException();
-           }
+           Verification verificationToken = verificationRepository.findByCode(code).orElseThrow(() -> new VerificationCodeNotFoundException());
 
-           return this.verifyUser(verification);
+           return this.verifyUser(verificationToken);
        }
        catch (VerificationCodeNotFoundException e) {
            System.out.println("Verification code is invalid");
