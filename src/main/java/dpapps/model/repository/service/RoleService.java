@@ -12,9 +12,9 @@ public interface RoleService {
     boolean roleExists(String role);
 
     /**
-     * Adds role to the database
+     * Persists the new Role, returns result of saving the entity.
      */
-    void addRole(String roleName);
+    boolean addRole(String roleName);
 
     /**
      * Returns role name

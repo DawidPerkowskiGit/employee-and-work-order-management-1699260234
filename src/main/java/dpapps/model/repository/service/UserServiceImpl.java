@@ -2,13 +2,14 @@ package dpapps.model.repository.service;
 
 import dpapps.constants.UserMessagesConstants;
 import dpapps.exception.InvalidRoleNameException;
-import dpapps.exception.RoleNotFoundException;
 import dpapps.exception.UserNotFoundException;
 import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.model.repository.UserRepository;
 import dpapps.security.userregistration.UserDto;
 import dpapps.tools.RoleChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
@@ -24,8 +25,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    //    private final RoleRepository roleRepository;
     private final RoleService roleService;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
@@ -43,14 +45,15 @@ public class UserServiceImpl implements UserService {
     public String add(User user) {
         try {
             if (userRepository.existsByLogin(user.getLogin())) {
+                logger.warn("Could not save User to the database. User with login '" + user.getLogin() + "' already exists");
                 throw new DataIntegrityViolationException(UserMessagesConstants.USER_ALREADY_EXISTS);
             }
             userRepository.save(user);
         } catch (DataIntegrityViolationException exception) {
-            exception.printStackTrace();
+            logger.warn("Could not save user to the database. User already exists");
             return UserMessagesConstants.USER_ALREADY_EXISTS;
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.warn("Could not save user to the database.");
             return UserMessagesConstants.CANNOT_ADD_USER;
         }
         return UserMessagesConstants.USER_ADDED_SUCCESSFULLY;
@@ -61,14 +64,15 @@ public class UserServiceImpl implements UserService {
     public String delete(String login) {
         try {
             if (!userRepository.existsByLogin(login)) {
+                logger.warn("Could not remove User from the database. User with login '" + login + "'does not exists");
                 throw new InvalidDataAccessApiUsageException(UserMessagesConstants.USER_NOT_EXISTS);
             }
             userRepository.deleteByLogin(login);
         } catch (InvalidDataAccessApiUsageException exception) {
-            exception.printStackTrace();
+            logger.warn("Could not remove User from the database. User does not exists");
             return UserMessagesConstants.USER_NOT_EXISTS;
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.warn("Could not remove User from the database.");
             return UserMessagesConstants.CANNOT_DELETE_USER;
         }
 
@@ -81,27 +85,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByLogin(login);
     }
 
-    public User findByLogin(String login) {
-        try {
-            return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException());
-        }
-        catch (UserNotFoundException e) {
-            //TODO logger
+    public User findByLogin(String login) throws UserNotFoundException {
 
-        }
-        return new User();
+        return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException("User with login '" + login + "' could not be found"));
+
     }
 
     @Override
-    public User findByLoginAndEmail(String login, String email) {
-        try {
-            return userRepository.findByLoginAndEmail(login, email).orElseThrow(() -> new UserNotFoundException());
-        }
-        catch (UserNotFoundException e) {
-            //TODO logger
-
-        }
-        return new User();
+    public User findByLoginAndEmail(String login, String email) throws UserNotFoundException {
+        return userRepository.findByLoginAndEmail(login, email).orElseThrow(() -> new UserNotFoundException("Could not find User with login '" + login + "' and email '" + email + "' in the database."));
     }
 
     public String add(UserDto userDto) {
@@ -109,30 +101,26 @@ public class UserServiceImpl implements UserService {
         return this.add(user);
     }
 
-    public void changePassword(String login, String password) {
+    public boolean changePassword(String login, String password) {
         String newPassword = passwordEncoder.encode(password);
 
-        User user = this.findByLogin(login);
-
-        user.setPassword(newPassword);
-        userRepository.save(user);
+        try {
+            User user = this.findByLogin(login);
+            user.setPassword(newPassword);
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
+        }
+        return false;
     }
 
     @Override
-    public boolean grantUserRole(User user, Role role) {
+    public boolean grantUserRole(User user, Role role) throws InvalidRoleNameException {
 
-        try {
-            if (!this.isRoleValid(role)) {
-                throw new InvalidRoleNameException();
-            }
-        } catch (InvalidRoleNameException e) {
-            System.out.println("Provided invalid role name");
-            e.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            System.out.println("Could not check if specified role is valid");
-            e.printStackTrace();
-            return false;
+
+        if (!this.isRoleValid(role)) {
+            throw new InvalidRoleNameException("Role is invalid");
         }
 
         try {
@@ -141,21 +129,27 @@ public class UserServiceImpl implements UserService {
             user.setRoles(userRoles);
             userRepository.save(user);
         } catch (Exception e) {
-            System.out.println("Could not grant user this role");
-            e.printStackTrace();
+            logger.warn(e.getMessage());
             return false;
         }
         return true;
     }
 
     @Override
-    public boolean grantUserRole(User user, String roleName) {
+    public boolean grantUserRole(User user, String roleName) throws InvalidRoleNameException {
 
         if (!this.isRoleValid(roleName)) {
-            return false;
+            throw new InvalidRoleNameException("Role is invalid");
         }
-        Role role = this.roleService.getRoleByName(roleName);
-        return this.grantUserRole(user, role);
+
+        try {
+            Role role = this.roleService.getRoleByName(roleName);
+            return this.grantUserRole(user, role);
+        }
+        catch (Exception e) {
+            logger.warn(e.getMessage());
+        }
+        return false;
     }
 
     @Override
@@ -177,7 +171,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(User user) {
-        this.userRepository.save(user);
+        try {
+            this.userRepository.save(user);
+        }
+        catch (Exception e) {
+            logger.warn(e.getMessage());
+        }
     }
 
     @Override
@@ -194,16 +193,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAuthenticatedUser() {
+    public User getAuthenticatedUser() throws Exception {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String username = authentication.getName();
-
-        User user = this.findByLogin(username);
-
-
-        return user;
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = this.findByLogin(username);
+            return user;
+        }
+        catch (Exception e) {
+            logger.warn(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
 
     }
 

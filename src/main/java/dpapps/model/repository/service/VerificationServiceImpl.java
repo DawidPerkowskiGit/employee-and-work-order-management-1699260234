@@ -7,6 +7,8 @@ import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.VerificationRepository;
 import dpapps.tools.EmailService;
 import dpapps.tools.VerificationCodeGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,8 @@ public class VerificationServiceImpl implements VerificationService {
 
     private final VerificationRepository verificationRepository;
     private final UserRepository userRepository;
-
     private final EmailService emailService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public VerificationServiceImpl(VerificationRepository verificationRepository,
@@ -47,8 +49,7 @@ public class VerificationServiceImpl implements VerificationService {
             return true;
         }
         catch (Exception e) {
-            System.out.println("Could not verify user");
-            e.printStackTrace();
+            logger.warn("Could not verify the User");
         }
         return false;
     }
@@ -61,12 +62,10 @@ public class VerificationServiceImpl implements VerificationService {
            return this.verifyUser(verificationToken);
        }
        catch (VerificationCodeNotFoundException e) {
-           System.out.println("Verification code is invalid");
-           e.printStackTrace();
+           logger.warn("Verification code is invalid");
        }
        catch (Exception e) {
-           System.out.println("Could not verify user");
-           e.printStackTrace();
+           logger.warn("Could not verify the User");
        }
        return false;
     }

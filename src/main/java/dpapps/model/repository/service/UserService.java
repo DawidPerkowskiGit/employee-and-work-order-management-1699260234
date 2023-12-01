@@ -1,6 +1,8 @@
 package dpapps.model.repository.service;
 
+import dpapps.exception.InvalidRoleNameException;
 import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
+import dpapps.exception.UserNotFoundException;
 import dpapps.model.Role;
 import dpapps.model.User;
 import dpapps.security.userregistration.UserDto;
@@ -37,28 +39,30 @@ public interface UserService {
     /**
      * Returns user based on login
      */
-    User findByLogin(String login);
+    User findByLogin(String login) throws UserNotFoundException;
 
     /**
      * Returns user based on login and email
      */
-    User findByLoginAndEmail(String login, String email);
+    User findByLoginAndEmail(String login, String email) throws UserNotFoundException;
 
     /**
      * Attempts to change user password
+     *
+     * @return
      */
-    void changePassword(String login, String password);
+    boolean changePassword(String login, String password);
 
 
     /**
      * Adds Role to a User. Returns result of the modification. Role Entity is passed as an argument
      */
-    boolean grantUserRole(User user, Role role);
+    boolean grantUserRole(User user, Role role) throws InvalidRoleNameException;
 
     /**
      * Adds Role to a User. Returns result of the modification. Role name is passed as an argument
      */
-    boolean grantUserRole(User user, String roleName);
+    boolean grantUserRole(User user, String roleName) throws InvalidRoleNameException;
 
 
     /**
@@ -90,7 +94,7 @@ public interface UserService {
     /**
      * Returns currently authenticated user
      */
-    User getAuthenticatedUser();
+    User getAuthenticatedUser() throws Exception;
 
     /**
      * Returns Users based on their role name

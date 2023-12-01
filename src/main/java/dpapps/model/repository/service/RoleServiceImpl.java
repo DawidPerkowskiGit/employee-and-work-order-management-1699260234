@@ -3,6 +3,8 @@ package dpapps.model.repository.service;
 import dpapps.exception.RoleNotFoundException;
 import dpapps.model.Role;
 import dpapps.model.repository.RoleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
 
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -25,13 +27,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void addRole(String roleName) {
-
-//        if (RoleConstants.availableRoles.)
-
+    public boolean addRole(String roleName) {
         Role role = new Role();
         role.setName(roleName);
-        this.roleRepository.save(role);
+
+        try {
+            this.roleRepository.save(role);
+            return true;
+        }
+        catch (Exception e) {
+            logger.warn("Could not save new Role '" + roleName + "' in the database");
+        }
+        return false;
     }
 
     @Override
@@ -55,7 +62,7 @@ public class RoleServiceImpl implements RoleService {
            return roleRepository.findByName(name).orElseThrow(() -> new RoleNotFoundException());
         }
         catch (RoleNotFoundException e) {
-            //TODO logger
+            logger.warn("Could not find Role with name '" + name + "' in the database.");
         }
         return new Role();
     }
@@ -66,7 +73,7 @@ public class RoleServiceImpl implements RoleService {
             return roleRepository.findById(id).orElseThrow(() -> new RoleNotFoundException());
         }
         catch (RoleNotFoundException e) {
-            //TODO logger
+            logger.warn("Could not find Project with id '" + id + "' in the database.");
         }
         return new Role();
     }
