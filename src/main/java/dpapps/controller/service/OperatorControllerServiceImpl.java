@@ -8,9 +8,10 @@ import dpapps.model.repository.service.ProjectService;
 import dpapps.model.repository.service.TaskService;
 import dpapps.model.repository.service.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Service
 public class OperatorControllerServiceImpl implements OperatorControllerService{
@@ -51,7 +52,7 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
 
     @Override
     public String saveTask(Task task, RedirectAttributes redirectAttributes) {
-        boolean isTaskAdded = this.taskService.add(task);
+        boolean isTaskAdded = this.taskService.save(task);
         if (isTaskAdded) {
             redirectAttributes.addFlashAttribute("successMessage", "Task added successfully!");
             return templateService.getSuccessfulTaskCreationView(redirectAttributes);
@@ -61,4 +62,32 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
         }
     }
 
+    @Override
+    public String getTasksList(Model model) {
+        List<Task> allTasks = taskService.findAll();
+        model.addAttribute("tasks", allTasks);
+        return templateService.getTasksList(model);
+    }
+
+    @Override
+    public String getEditTask(Long id, RedirectAttributes redirectAttributes, Model model) {
+        Task task = taskService.findById(id);
+        model.addAttribute("task", task);
+        model.addAttribute("projects", projectService.findAll());
+        model.addAttribute("languages", codingLanguageService.findAll());
+        model.addAttribute("users", userService.findAllByRole(RoleConstants.ROLE_DESIGNER));
+        return templateService.getEditTaskView(model);
+    }
+
+    @Override
+    public String saveEditedTask(Task task, RedirectAttributes redirectAttributes) {
+        boolean isTaskAdded = this.taskService.save(task);
+        if (isTaskAdded) {
+            redirectAttributes.addFlashAttribute("successMessage", "Task edited successfully!");
+            return templateService.getSuccessfulTaskEditView(redirectAttributes, task.getId());
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Could not edit task. Please try again.");
+            return templateService.getUnsuccessfulTaskEditView(redirectAttributes, task.getId());
+        }
+    }
 }

@@ -55,7 +55,7 @@ public interface TaskService {
     /**
      * Persists the Task
      */
-    boolean add(Task task);
+    boolean save(Task task);
 
     /**
      * Deletes task by Id
@@ -66,4 +66,10 @@ public interface TaskService {
      * Deletes all tasks by name
      */
     boolean deleteAllByName(String name);
+
+    /**
+     * Fetches all Tasks from persistence layer
+     * @return
+     */
+    List<Task> findAll();
 }

@@ -26,4 +26,24 @@ public class OperatorTemplateServiceImpl implements OperatorTemplateService{
     public String getUnsuccessfulTaskCreationView(RedirectAttributes redirectAttributes) {
         return "redirect:/operator/add-task?error";
     }
+
+    @Override
+    public String getTasksList(Model model) {
+        return "operator/tasks-list";
+    }
+
+    @Override
+    public String getEditTaskView(Model model) {
+        return "operator/edit-task";
+    }
+
+    @Override
+    public String getSuccessfulTaskEditView(RedirectAttributes redirectAttributes, Long id) {
+        return "redirect:/operator/tasks/edit/"+id+"?success";
+    }
+
+    @Override
+    public String getUnsuccessfulTaskEditView(RedirectAttributes redirectAttributes, Long id) {
+        return "redirect:/operator/tasks/edit/"+id+"?error";
+    }
 }

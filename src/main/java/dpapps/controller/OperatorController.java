@@ -2,10 +2,10 @@ package dpapps.controller;
 
 import dpapps.controller.service.OperatorControllerService;
 import dpapps.model.Task;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,5 +33,18 @@ public class OperatorController {
         return this.controllerService.saveTask(task, redirectAttributes);
     }
 
+    @GetMapping("/operator/tasks")
+    public String getTasksLists(Model model) {
+        return this.controllerService.getTasksList(model);
+    }
 
+    @GetMapping("/operator/tasks/edit/{taskId}")
+    public String editTask(@PathVariable Long taskId, RedirectAttributes redirectAttributes, Model model) {
+        return this.controllerService.getEditTask(taskId, redirectAttributes, model);
+    }
+
+    @PostMapping("/operator/tasks/edit/save")
+    public String saveEditedTask(Task task, RedirectAttributes redirectAttributes) {
+        return this.controllerService.saveEditedTask(task, redirectAttributes);
+    }
 }
