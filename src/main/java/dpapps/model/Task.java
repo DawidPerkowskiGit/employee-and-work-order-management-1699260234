@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -39,5 +40,23 @@ public class Task implements DatabaseEntryMarker {
 
     public Task() {
         taskId = UUID.randomUUID().toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+                Objects.equals(name, task.name) &&
+                Objects.equals(description, task.description) &&
+                Objects.equals(project, task.project) &&
+                Objects.equals(codingLanguage, task.codingLanguage) &&
+                Objects.equals(user, task.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, project, codingLanguage, user);
     }
 }

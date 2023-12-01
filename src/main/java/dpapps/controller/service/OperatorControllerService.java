@@ -20,4 +20,19 @@ public interface OperatorControllerService {
      * Saves the task
      */
     String saveTask(Task task, RedirectAttributes redirectAttributes);
+
+    /**
+     * Gets all tasks
+     */
+    String getTasksList(Model model);
+
+    /**
+     * Prepares sata to render Edit Task view
+     */
+    String getEditTask(Long taskId, RedirectAttributes redirectAttributes, Model model);
+
+    /**
+     * Saves edited task
+     */
+    String saveEditedTask(Task task, RedirectAttributes redirectAttributes);
 }

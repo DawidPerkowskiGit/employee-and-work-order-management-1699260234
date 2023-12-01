@@ -79,7 +79,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public boolean add(Task task) {
+    public boolean save(Task task) {
         try {
             this.taskRepository.save(task);
             return true;
@@ -112,5 +112,10 @@ public class TaskServiceImpl implements TaskService{
             logger.warn("Could not delete Tasks with name '" + name + "' from the database");
         }
         return true;
+    }
+
+    @Override
+    public List<Task> findAll() {
+        return taskRepository.findAll();
     }
 }
