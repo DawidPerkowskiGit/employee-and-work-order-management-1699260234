@@ -1,6 +1,7 @@
 package dpapps.user;
 
 import dpapps.constants.UserMessagesConstants;
+import dpapps.exception.UserNotFoundException;
 import dpapps.model.User;
 import dpapps.model.Verification;
 import dpapps.model.repository.VerificationRepository;
@@ -90,7 +91,7 @@ public class UserDbTests {
 
 
     @Test
-    public void shouldChangePassword() {
+    public void shouldChangePassword() throws UserNotFoundException {
         addTestingUser();
         String oldPassword = userService.findByLogin(userData[0]).getPassword();
 
@@ -100,7 +101,7 @@ public class UserDbTests {
     }
 
     @Test
-    public void shouldVerifyUser() {
+    public void shouldVerifyUser() throws UserNotFoundException {
         cleanupVerificationRepository();
         addTestingUser();
 
@@ -120,7 +121,7 @@ public class UserDbTests {
     }
 
     @Test
-    public void shouldNotVerifyUser() {
+    public void shouldNotVerifyUser() throws UserNotFoundException {
         cleanupVerificationRepository();
         addTestingUser();
 
@@ -166,7 +167,7 @@ public class UserDbTests {
         }
     }
 
-    private void setupVerification(String login) {
+    private void setupVerification(String login) throws UserNotFoundException {
         User user = userService.findByLogin(login);
         String verificationCode = this.verificationService.generateVerificationCode();
         this.verificationService.assignVerificationCodeToUser(user, verificationCode);

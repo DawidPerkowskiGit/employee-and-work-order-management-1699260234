@@ -4,6 +4,8 @@ import dpapps.exception.CodingLanguageNotFoundException;
 import dpapps.model.CodingLanguage;
 import dpapps.model.Project;
 import dpapps.model.repository.CodingLanguageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.List;
 public class CodingLanguageServiceImpl implements CodingLanguageService{
 
     private final CodingLanguageRepository codingLanguageRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public CodingLanguageServiceImpl(CodingLanguageRepository codingLanguageRepository) {
@@ -35,7 +39,7 @@ public class CodingLanguageServiceImpl implements CodingLanguageService{
             return codingLanguageRepository.findByName(name).orElseThrow(() -> new CodingLanguageNotFoundException());
         }
         catch (CodingLanguageNotFoundException e) {
-            //TODO logger
+            logger.warn("Could not find Coding Language with name '" + name + "' in the database.");
         }
         return new CodingLanguage();
     }
@@ -52,8 +56,7 @@ public class CodingLanguageServiceImpl implements CodingLanguageService{
             return true;
         }
         catch (Exception e) {
-            System.out.println("Could not new Coding Language to the database");
-            e.printStackTrace();
+            logger.warn("Could not save new Coding Language in the database");
         }
         return false;
     }

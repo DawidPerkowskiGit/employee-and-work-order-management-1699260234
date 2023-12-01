@@ -1,9 +1,12 @@
 package dpapps.model.repository.service;
 
+import dpapps.exception.TaskNotFoundException;
 import dpapps.model.CodingLanguage;
 import dpapps.model.Project;
 import dpapps.model.Task;
 import dpapps.model.repository.TaskRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,8 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService{
 
     private final TaskRepository taskRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public TaskServiceImpl(TaskRepository taskRepository) {
@@ -31,9 +36,13 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public Task findByName(String name) {
-        if (this.existsByName(name)) {
-            return this.taskRepository.findByName(name).get();
+        try {
+            return this.taskRepository.findByName(name).orElseThrow(() -> new TaskNotFoundException());
         }
+        catch (TaskNotFoundException e) {
+            logger.warn("Could not find Task with name '" + name + "' in the database.");
+        }
+
         return new Task();
     }
 
@@ -44,9 +53,13 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public Task findByTaskId(String taskId) {
-        if (this.existsByTaskId(taskId)) {
-            return this.taskRepository.findByTaskId(taskId).get();
+        try {
+            return this.taskRepository.findByTaskId(taskId).orElseThrow(() -> new TaskNotFoundException());
         }
+        catch (TaskNotFoundException e) {
+            logger.warn("Could not find Task with task id '" + taskId + "' in the database.");
+        }
+
         return new Task();
     }
 
@@ -72,8 +85,7 @@ public class TaskServiceImpl implements TaskService{
             return true;
         }
         catch (Exception e) {
-            System.out.println("Could not add new Task to a database");
-            e.printStackTrace();
+            logger.warn("Could not save new Task in the database");
         }
         return false;
     }
@@ -85,8 +97,7 @@ public class TaskServiceImpl implements TaskService{
             return true;
         }
         catch (Exception e) {
-            System.out.println("Could not remove task from the database");
-            e.printStackTrace();
+            logger.warn("Could not delete Task id = " + id + " from the database");
         }
         return false;
     }
@@ -98,8 +109,7 @@ public class TaskServiceImpl implements TaskService{
             return true;
         }
         catch (Exception e) {
-            System.out.println("Could not delete task by specified name");
-            e.printStackTrace();
+            logger.warn("Could not delete Tasks with name '" + name + "' from the database");
         }
         return true;
     }

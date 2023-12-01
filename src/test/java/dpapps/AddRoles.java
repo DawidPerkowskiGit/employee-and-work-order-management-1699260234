@@ -1,6 +1,7 @@
 package dpapps;
 
 import dpapps.constants.RoleConstants;
+import dpapps.exception.InvalidRoleNameException;
 import dpapps.model.User;
 import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.service.RoleService;
@@ -47,21 +48,21 @@ public class AddRoles {
 
     @Disabled
     @Test
-    public void grantAdminRole() {
+    public void grantAdminRole() throws InvalidRoleNameException {
         User user = userRepository.findByLogin("admin").get();
         userService.grantUserRole(user, RoleConstants.ROLE_ADMIN);
     }
 
     @Disabled
     @Test
-    public void grantOperatorRole() {
+    public void grantOperatorRole() throws InvalidRoleNameException {
         User user = userRepository.findByLogin("operator").get();
         userService.grantUserRole(user, RoleConstants.ROLE_OPERATOR);
     }
 
     @Disabled
     @Test
-    public void grantDesignerRole() {
+    public void grantDesignerRole() throws InvalidRoleNameException {
         User user = userRepository.findByLogin("designer").get();
         userService.grantUserRole(user, RoleConstants.ROLE_DESIGNER);
     }

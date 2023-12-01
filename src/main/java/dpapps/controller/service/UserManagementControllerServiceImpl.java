@@ -1,13 +1,16 @@
 package dpapps.controller.service;
 
+import dpapps.controller.service.templateservice.ErrorTemplateService;
 import dpapps.controller.service.templateservice.UserManagementTemplateService;
 import dpapps.exception.UserCouldNotBeSavedInTheDatabaseException;
+import dpapps.exception.UserNotFoundException;
 import dpapps.model.User;
-import dpapps.model.repository.UserRepository;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.VerificationService;
 import dpapps.security.changepassword.ChangePasswordDto;
 import dpapps.security.userregistration.UserDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,12 +22,16 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     private final VerificationService verificationService;
     private final UserManagementTemplateService templateService;
 
+    private final ErrorTemplateService errorTemplateService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public UserManagementControllerServiceImpl(UserService userService, VerificationService verificationService,
-                                                UserManagementTemplateService templateService) {
+                                               UserManagementTemplateService templateService, ErrorTemplateService errorTemplateService) {
         this.userService = userService;
         this.verificationService = verificationService;
         this.templateService = templateService;
+        this.errorTemplateService = errorTemplateService;
     }
 
     public String register(Model model) {
@@ -35,7 +42,15 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     }
 
     public String processRegister(UserDto userDto, BindingResult result, Model model) {
-        User existingUser = userService.findByLogin(userDto.getLogin());
+        User existingUser;
+
+        try {
+            existingUser = userService.findByLogin(userDto.getLogin());
+        }
+        catch (UserNotFoundException e) {
+            logger.warn(e.getMessage());
+            return errorTemplateService.getNotFoundView();
+        }
 
         if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
             result.rejectValue("login", null, "There is already an account registered with the same login");
@@ -55,10 +70,17 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     }
 
     private void setupVerification(String login) {
-        User user = userService.findByLogin(login);
-        String verificationCode = this.verificationService.generateVerificationCode();
-        this.verificationService.assignVerificationCodeToUser(user, verificationCode);
-        this.verificationService.sendVerificationEmail(user, verificationCode);
+
+        try {
+            User user = userService.findByLogin(login);
+            String verificationCode = this.verificationService.generateVerificationCode();
+            this.verificationService.assignVerificationCodeToUser(user, verificationCode);
+            this.verificationService.sendVerificationEmail(user, verificationCode);
+        }
+        catch (Exception e) {
+            logger.warn(e.getMessage());
+        }
+
     }
 
     public String processLogin() {
@@ -73,22 +95,29 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     }
 
     @Override
-    public String processChangePassword(ChangePasswordDto dto, BindingResult result, Model model) {
-        User existingUser = userService.findByLoginAndEmail(dto.getLogin(), dto.getEmail());
+    public String processChangePassword(ChangePasswordDto dto, BindingResult bindingResult, Model model) {
+        User existingUser;
+        try {
+            existingUser = userService.findByLoginAndEmail(dto.getLogin(), dto.getEmail());
+        } catch (UserNotFoundException e) {
+            logger.warn(e.getMessage());
+            return errorTemplateService.getNotFoundView();
+        }
+
 
         if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty() && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) {
             if (dto.getPassword().equals(dto.getRepeatedPassword())) {
                 userService.changePassword(dto.getLogin(), dto.getPassword());
             }
             else {
-                result.rejectValue("password", null,"Passwords do not match");
+                bindingResult.rejectValue("password", null,"Passwords do not match");
             }
         }
         else {
-            result.rejectValue("login", null, "Invalid login or email");
+            bindingResult.rejectValue("login", null, "Invalid login or email");
         }
 
-        if (result.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("userpass", dto);
             return templateService.getChangePasswordView(model);
         }
@@ -108,7 +137,15 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
     @Override
     public String getProfile(Model model) {
-        User user = userService.getAuthenticatedUser();
+        User user;
+        try {
+            user = userService.getAuthenticatedUser();
+        }
+        catch (Exception e) {
+            logger.warn(e.getMessage());
+            return errorTemplateService.getNotFoundView();
+        }
+
         model.addAttribute("user", user);
 
         return templateService.getUserProfileView(model);
