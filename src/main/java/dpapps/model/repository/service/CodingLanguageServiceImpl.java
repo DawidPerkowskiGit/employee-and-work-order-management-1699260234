@@ -25,12 +25,12 @@ public class CodingLanguageServiceImpl implements CodingLanguageService{
 
     @Override
     public CodingLanguage findById(Long id) {
-        return this.codingLanguageRepository.findById(id).get();
+        return codingLanguageRepository.findById(id).get();
     }
 
     @Override
     public boolean existsById(Long id) {
-        return this.codingLanguageRepository.existsById(id);
+        return codingLanguageRepository.existsById(id);
     }
 
     @Override
@@ -46,13 +46,13 @@ public class CodingLanguageServiceImpl implements CodingLanguageService{
 
     @Override
     public boolean existsByName(String name) {
-        return this.codingLanguageRepository.existsByName(name);
+        return codingLanguageRepository.existsByName(name);
     }
 
     @Override
     public boolean add(CodingLanguage codingLanguage) {
         try {
-            this.codingLanguageRepository.save(codingLanguage);
+            codingLanguageRepository.save(codingLanguage);
             return true;
         }
         catch (Exception e) {
@@ -63,6 +63,6 @@ public class CodingLanguageServiceImpl implements CodingLanguageService{
 
     @Override
     public List<CodingLanguage> findAll() {
-        return this.codingLanguageRepository.findAll();
+        return codingLanguageRepository.findAll();
     }
 }

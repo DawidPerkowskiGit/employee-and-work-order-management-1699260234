@@ -24,12 +24,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project findById(Long id) {
-        return this.projectRepository.findById(id).get();
+        return projectRepository.findById(id).get();
     }
 
     @Override
     public boolean existsById(Long id) {
-        return this.projectRepository.existsById(id);
+        return projectRepository.existsById(id);
     }
 
     @Override
@@ -45,13 +45,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean existsByName(String name) {
-        return this.projectRepository.existsByName(name);
+        return projectRepository.existsByName(name);
     }
 
     @Override
     public boolean add(Project project) {
         try {
-            this.projectRepository.save(project);
+            projectRepository.save(project);
             return true;
         } catch (Exception e) {
             logger.warn("Could not save new Project in the database");

@@ -36,13 +36,13 @@ public class AddRoles {
     @Test
     public void addRoles() {
         if (!roleService.roleExists(RoleConstants.ROLE_ADMIN)) {
-            this.roleService.addRole(RoleConstants.ROLE_ADMIN);
+            roleService.addRole(RoleConstants.ROLE_ADMIN);
         }
         if (!roleService.roleExists(RoleConstants.ROLE_DESIGNER)) {
-            this.roleService.addRole(RoleConstants.ROLE_DESIGNER);
+            roleService.addRole(RoleConstants.ROLE_DESIGNER);
         }
         if (!roleService.roleExists(RoleConstants.ROLE_OPERATOR)) {
-            this.roleService.addRole(RoleConstants.ROLE_OPERATOR);
+            roleService.addRole(RoleConstants.ROLE_OPERATOR);
         }
     }
 

@@ -19,7 +19,7 @@ public class RoleChecker {
     }
 
     public boolean isRoleValid(String role) {
-        if (this.roles.contains(role)) {
+        if (roles.contains(role)) {
             return true;
         }
         return false;

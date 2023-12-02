@@ -14,7 +14,7 @@ public class VerificationCodeGenerator {
         Random random = new Random();
 
         for (int iteration = 0; iteration < AppConstants.VERIFICATION_CODE_LENGTH; iteration++) {
-            stringBuilder.append(this.characters[random.nextInt(this.characters.length)]);
+            stringBuilder.append(characters[random.nextInt(characters.length)]);
         }
 
         return stringBuilder.toString();

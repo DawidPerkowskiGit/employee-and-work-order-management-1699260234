@@ -64,7 +64,7 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
         userService.add(userDto);
 
-        this.setupVerification(userDto.getLogin());
+        setupVerification(userDto.getLogin());
 
         return templateService.getAfterRegistrationView();
     }
@@ -73,9 +73,9 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
 
         try {
             User user = userService.findByLogin(login);
-            String verificationCode = this.verificationService.generateVerificationCode();
-            this.verificationService.assignVerificationCodeToUser(user, verificationCode);
-            this.verificationService.sendVerificationEmail(user, verificationCode);
+            String verificationCode = verificationService.generateVerificationCode();
+            verificationService.assignVerificationCodeToUser(user, verificationCode);
+            verificationService.sendVerificationEmail(user, verificationCode);
         }
         catch (Exception e) {
             logger.warn(e.getMessage());
@@ -129,10 +129,10 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
        boolean result = verificationService.processVerification(code);
        if (result) {
            model.addAttribute("successMessage", "Account verification was successful!");
-           return this.templateService.getVerificationResultView();
+           return templateService.getVerificationResultView();
        }
        model.addAttribute("errorMessage", "Your account could not be verified");
-       return this.templateService.getVerificationResultView();
+       return templateService.getVerificationResultView();
     }
 
     @Override

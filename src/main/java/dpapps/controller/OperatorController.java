@@ -20,31 +20,31 @@ public class OperatorController {
 
     @GetMapping("/operator/panel")
     public String renerPanel() {
-        return this.controllerService.getPanel();
+        return controllerService.getPanel();
     }
 
     @GetMapping("/operator/add-task")
     public String renerAddTask(Model model) {
-        return this.controllerService.getAddTaskView(model);
+        return controllerService.getAddTaskView(model);
     }
 
     @PostMapping("/operator/add-task")
     public String processAddTask(Task task, RedirectAttributes redirectAttributes) {
-        return this.controllerService.saveTask(task, redirectAttributes);
+        return controllerService.saveTask(task, redirectAttributes);
     }
 
     @GetMapping("/operator/tasks")
     public String getTasksLists(Model model) {
-        return this.controllerService.getTasksList(model);
+        return controllerService.getTasksList(model);
     }
 
     @GetMapping("/operator/tasks/edit/{taskId}")
     public String editTask(@PathVariable Long taskId, RedirectAttributes redirectAttributes, Model model) {
-        return this.controllerService.getEditTask(taskId, redirectAttributes, model);
+        return controllerService.getEditTask(taskId, redirectAttributes, model);
     }
 
     @PostMapping("/operator/tasks/edit/save")
     public String saveEditedTask(Task task, RedirectAttributes redirectAttributes) {
-        return this.controllerService.saveEditedTask(task, redirectAttributes);
+        return controllerService.saveEditedTask(task, redirectAttributes);
     }
 }

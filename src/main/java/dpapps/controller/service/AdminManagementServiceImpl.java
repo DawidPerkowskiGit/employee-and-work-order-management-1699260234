@@ -50,7 +50,7 @@ public class AdminManagementServiceImpl implements AdminManagementService {
         try {
             userService.saveUser(user);
             redirectAttributes.addFlashAttribute("successMessage", "Roles updated successfully!");
-            return this.templateService.getAssignRolesSuccessfulView(userId, selectedRoles, redirectAttributes);
+            return templateService.getAssignRolesSuccessfulView(userId, selectedRoles, redirectAttributes);
         }
         catch (UserCouldNotBeSavedInTheDatabaseException e) {
             //TODO
@@ -58,7 +58,7 @@ public class AdminManagementServiceImpl implements AdminManagementService {
             System.out.println("Error adding task. Please try again.");
             redirectAttributes.addFlashAttribute("errorMessage", "Could not update the roles. Please try again.");
         }
-        return this.templateService.getAssignRolesUnsuccessfulView(userId, selectedRoles, redirectAttributes);
+        return templateService.getAssignRolesUnsuccessfulView(userId, selectedRoles, redirectAttributes);
     }
 
     @Override
