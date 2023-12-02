@@ -27,7 +27,7 @@ public class ProjectTests {
         Project project = new Project();
         project.setName(name);
 
-        return this.service.add(project);
+        return service.add(project);
     }
 
     @Disabled
@@ -46,7 +46,7 @@ public class ProjectTests {
 
         for (String name : projectList
         ) {
-            result = result & this.shouldAddCodingLanguage(name);
+            result = result & shouldAddCodingLanguage(name);
         }
 
         assertTrue(result);

@@ -23,7 +23,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public boolean roleExists(String role) {
-        return this.roleRepository.existsByName(role);
+        return roleRepository.existsByName(role);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class RoleServiceImpl implements RoleService {
         role.setName(roleName);
 
         try {
-            this.roleRepository.save(role);
+            roleRepository.save(role);
             return true;
         }
         catch (Exception e) {
@@ -48,12 +48,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getRolesById(List<Long> listOfRoles) {
-        return this.roleRepository.findAllById(listOfRoles);
+        return roleRepository.findAllById(listOfRoles);
     }
 
     @Override
     public List<Role> findAll() {
-        return this.roleRepository.findAll();
+        return roleRepository.findAll();
     }
 
     @Override

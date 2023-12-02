@@ -37,7 +37,7 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public void assignVerificationCodeToUser(User user, String code) {
         Verification verification = new Verification(user, code);
-        this.verificationRepository.save(verification);
+        verificationRepository.save(verification);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class VerificationServiceImpl implements VerificationService {
         try {
             verification.getUser().setVerified(true);
             userRepository.save(verification.getUser());
-            this.cleanupRepositoryAfterVerification(verification);
+            cleanupRepositoryAfterVerification(verification);
             return true;
         }
         catch (Exception e) {
@@ -59,7 +59,7 @@ public class VerificationServiceImpl implements VerificationService {
        try {
            Verification verificationToken = verificationRepository.findByCode(code).orElseThrow(() -> new VerificationCodeNotFoundException());
 
-           return this.verifyUser(verificationToken);
+           return verifyUser(verificationToken);
        }
        catch (VerificationCodeNotFoundException e) {
            logger.warn("Verification code is invalid");

@@ -98,14 +98,14 @@ public class UserServiceImpl implements UserService {
 
     public String add(UserDto userDto) {
         User user = new User(userDto.getLogin(), passwordEncoder.encode(userDto.getPassword()), userDto.getEmail(), userDto.getName());
-        return this.add(user);
+        return add(user);
     }
 
     public boolean changePassword(String login, String password) {
         String newPassword = passwordEncoder.encode(password);
 
         try {
-            User user = this.findByLogin(login);
+            User user = findByLogin(login);
             user.setPassword(newPassword);
             userRepository.save(user);
             return true;
@@ -119,12 +119,12 @@ public class UserServiceImpl implements UserService {
     public boolean grantUserRole(User user, Role role) throws InvalidRoleNameException {
 
 
-        if (!this.isRoleValid(role)) {
+        if (!isRoleValid(role)) {
             throw new InvalidRoleNameException("Role is invalid");
         }
 
         try {
-            List<Role> userRoles = this.getUserRoles(user);
+            List<Role> userRoles = getUserRoles(user);
             userRoles.add(role);
             user.setRoles(userRoles);
             userRepository.save(user);
@@ -138,13 +138,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean grantUserRole(User user, String roleName) throws InvalidRoleNameException {
 
-        if (!this.isRoleValid(roleName)) {
+        if (!isRoleValid(roleName)) {
             throw new InvalidRoleNameException("Role is invalid");
         }
 
         try {
-            Role role = this.roleService.getRoleByName(roleName);
-            return this.grantUserRole(user, role);
+            Role role = roleService.getRoleByName(roleName);
+            return grantUserRole(user, role);
         }
         catch (Exception e) {
             logger.warn(e.getMessage());
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
     public List<String> getUserRoleNames(User user) {
         List<String> roleNames = new ArrayList<>();
 
-        for (Role role : this.getUserRoles(user)
+        for (Role role : getUserRoles(user)
         ) {
             roleNames.add(role.getName());
         }
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(User user) {
         try {
-            this.userRepository.save(user);
+            userRepository.save(user);
         }
         catch (Exception e) {
             logger.warn(e.getMessage());
@@ -181,15 +181,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        if (this.userRepository.findById(id).isPresent()) {
-            return this.userRepository.findById(id).get();
+        if (userRepository.findById(id).isPresent()) {
+            return userRepository.findById(id).get();
         }
         return new User();
     }
 
     @Override
     public List<User> findAll() {
-        return this.userRepository.findAll();
+        return userRepository.findAll();
     }
 
     @Override
@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
-            User user = this.findByLogin(username);
+            User user = findByLogin(username);
             return user;
         }
         catch (Exception e) {
@@ -210,18 +210,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAllByRole(String roleName) {
-        Role role = this.roleService.getRoleByName(roleName);
-        return this.userRepository.findAllByRoles(role);
+        Role role = roleService.getRoleByName(roleName);
+        return userRepository.findAllByRoles(role);
     }
 
     @Override
     public List<User> findAllByRole(Long id) {
-        Role role = this.roleService.getRoleById(id);
-        return this.userRepository.findAllByRoles(role);
+        Role role = roleService.getRoleById(id);
+        return userRepository.findAllByRoles(role);
     }
 
     private boolean isRoleValid(Role role) {
-        return this.isRoleValid(role.getName());
+        return isRoleValid(role.getName());
     }
 
     private boolean isRoleValid(String roleName) {

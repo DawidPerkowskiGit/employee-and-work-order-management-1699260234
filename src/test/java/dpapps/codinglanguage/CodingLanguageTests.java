@@ -27,7 +27,7 @@ public class CodingLanguageTests {
         CodingLanguage codingLanguage = new CodingLanguage();
         codingLanguage.setName(name);
 
-        return this.service.add(codingLanguage);
+        return service.add(codingLanguage);
     }
 
     @Disabled
@@ -66,7 +66,7 @@ public class CodingLanguageTests {
 
         for (String name : languageList
         ) {
-            result = result & this.shouldAddCodingLanguage(name);
+            result = result & shouldAddCodingLanguage(name);
         }
 
         assertTrue(result);

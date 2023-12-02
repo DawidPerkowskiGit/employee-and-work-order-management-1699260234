@@ -3,10 +3,8 @@ package dpapps.controller.service;
 import dpapps.constants.RoleConstants;
 import dpapps.controller.service.templateservice.OperatorTemplateService;
 import dpapps.model.Task;
-import dpapps.model.repository.service.CodingLanguageService;
-import dpapps.model.repository.service.ProjectService;
-import dpapps.model.repository.service.TaskService;
-import dpapps.model.repository.service.UserService;
+import dpapps.model.TaskNotification;
+import dpapps.model.repository.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,19 +24,21 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
 
     private final OperatorTemplateService templateService;
 
+    private final TaskNotificationService taskNotificationService;
 
-    public OperatorControllerServiceImpl(ProjectService projectService, CodingLanguageService codingLanguageService, UserService userService, TaskService taskService, OperatorTemplateService templateService) {
+    public OperatorControllerServiceImpl(ProjectService projectService, CodingLanguageService codingLanguageService, UserService userService, TaskService taskService, OperatorTemplateService templateService, TaskNotificationService taskNotificationService) {
         this.projectService = projectService;
         this.codingLanguageService = codingLanguageService;
         this.userService = userService;
         this.taskService = taskService;
         this.templateService = templateService;
+        this.taskNotificationService = taskNotificationService;
     }
 
 
     @Override
     public String getPanel() {
-        return this.templateService.getOperatorPanelView();
+        return templateService.getOperatorPanelView();
     }
 
     @Override
@@ -52,8 +52,9 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
 
     @Override
     public String saveTask(Task task, RedirectAttributes redirectAttributes) {
-        boolean isTaskAdded = this.taskService.save(task);
+        boolean isTaskAdded = taskService.save(task);
         if (isTaskAdded) {
+            notifyUser(task);
             redirectAttributes.addFlashAttribute("successMessage", "Task added successfully!");
             return templateService.getSuccessfulTaskCreationView(redirectAttributes);
         } else {
@@ -81,7 +82,7 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
 
     @Override
     public String saveEditedTask(Task task, RedirectAttributes redirectAttributes) {
-        boolean isTaskAdded = this.taskService.save(task);
+        boolean isTaskAdded = taskService.save(task);
         if (isTaskAdded) {
             redirectAttributes.addFlashAttribute("successMessage", "Task edited successfully!");
             return templateService.getSuccessfulTaskEditView(redirectAttributes, task.getId());
@@ -89,5 +90,10 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
             redirectAttributes.addFlashAttribute("errorMessage", "Could not edit task. Please try again.");
             return templateService.getUnsuccessfulTaskEditView(redirectAttributes, task.getId());
         }
+    }
+    
+    private void notifyUser(Task task) {
+        TaskNotification taskNotification = taskNotificationService.prepareNotification(task);
+        taskNotificationService.save(taskNotification);
     }
 }

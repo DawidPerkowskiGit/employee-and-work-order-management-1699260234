@@ -18,6 +18,13 @@
     <div class="row">
         <h1 class="text-center"> Designer panel. </h1>
 
+
+        <div th:each="notification: ${notifications}">
+            <div class="alert alert-info" role="alert">
+                <strong th:text="'You received new task : ' + ${notification.task.name}"></strong>
+            </div>
+        </div>
+
     </div>
 </div>
 <footer class="footer" style="position: fixed; bottom: 0">
@@ -25,5 +32,6 @@
         <div class="text-muted" th:replace="~{fragments/footer :: footer}"></div>
     </div>
 </footer>
+
 </body>
 </html>

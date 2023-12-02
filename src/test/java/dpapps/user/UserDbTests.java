@@ -55,7 +55,7 @@ public class UserDbTests {
     @Test
     public void shouldAddNewUser() {
         boolean userExistsBefore = userService.existsByLogin(userData[0]);
-        this.addTestingUser();
+        addTestingUser();
         boolean userExistsAfter = userService.existsByLogin(userData[0]);
 
         assertThat(!userExistsBefore && userExistsAfter).isTrue();
@@ -67,7 +67,7 @@ public class UserDbTests {
         addTestingUser();
 
         boolean userExistsBefore = userService.existsByLogin(userData[0]);
-        this.removeTestingUser();
+        removeTestingUser();
         boolean userExistsAfter = userService.existsByLogin(userData[0]);
 
         assertThat(userExistsBefore && !userExistsAfter).isTrue();
@@ -75,8 +75,8 @@ public class UserDbTests {
 
     @Test
     public void shouldNotAddNewUserWithExistingLogin() {
-        this.addTestingUser();
-        String message = this.addTestingUser();
+        addTestingUser();
+        String message = addTestingUser();
         String expectedMessage = UserMessagesConstants.USER_ALREADY_EXISTS;
         assertEquals(message, expectedMessage);
     }
@@ -84,7 +84,7 @@ public class UserDbTests {
     @Test
     public void shouldNotRemoveNonExistingUser() {
         removeTestingUser();
-        String message = this.removeTestingUser();
+        String message = removeTestingUser();
         String expectedMessage = UserMessagesConstants.USER_NOT_EXISTS;
         assertEquals(message, expectedMessage);
     }
@@ -109,7 +109,7 @@ public class UserDbTests {
 
         boolean verifiedBefore = user.getVerified();
 
-        this.setupVerification(userData[0]);
+        setupVerification(userData[0]);
         Verification verification = verificationRepository.findByUser(user).get();
         String code = verification.getCode();
 
@@ -129,7 +129,7 @@ public class UserDbTests {
 
         boolean verifiedBefore = user.getVerified();
 
-        this.setupVerification(userData[0]);
+        setupVerification(userData[0]);
         Verification verification = verificationRepository.findByUser(user).get();
         String code = verification.getCode() + "invalid";
 
@@ -169,7 +169,7 @@ public class UserDbTests {
 
     private void setupVerification(String login) throws UserNotFoundException {
         User user = userService.findByLogin(login);
-        String verificationCode = this.verificationService.generateVerificationCode();
-        this.verificationService.assignVerificationCodeToUser(user, verificationCode);
+        String verificationCode = verificationService.generateVerificationCode();
+        verificationService.assignVerificationCodeToUser(user, verificationCode);
     }
 }

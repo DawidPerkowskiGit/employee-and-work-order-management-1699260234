@@ -26,18 +26,18 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public Task findById(Long id) {
-        return this.taskRepository.findById(id).get();
+        return taskRepository.findById(id).get();
     }
 
     @Override
     public boolean existsById(Long id) {
-        return this.taskRepository.existsById(id);
+        return taskRepository.existsById(id);
     }
 
     @Override
     public Task findByName(String name) {
         try {
-            return this.taskRepository.findByName(name).orElseThrow(() -> new TaskNotFoundException());
+            return taskRepository.findByName(name).orElseThrow(() -> new TaskNotFoundException());
         }
         catch (TaskNotFoundException e) {
             logger.warn("Could not find Task with name '" + name + "' in the database.");
@@ -48,13 +48,13 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public boolean existsByName(String name) {
-        return this.taskRepository.existsByName(name);
+        return taskRepository.existsByName(name);
     }
 
     @Override
     public Task findByTaskId(String taskId) {
         try {
-            return this.taskRepository.findByTaskId(taskId).orElseThrow(() -> new TaskNotFoundException());
+            return taskRepository.findByTaskId(taskId).orElseThrow(() -> new TaskNotFoundException());
         }
         catch (TaskNotFoundException e) {
             logger.warn("Could not find Task with task id '" + taskId + "' in the database.");
@@ -65,23 +65,23 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public boolean existsByTaskId(String id) {
-        return this.taskRepository.existsByTaskId(id);
+        return taskRepository.existsByTaskId(id);
     }
 
     @Override
     public List<Task> findAllByProject(Project project) {
-        return this.taskRepository.findAllByProject(project);
+        return taskRepository.findAllByProject(project);
     }
 
     @Override
     public List<Task> findAllByCodingLanguage(CodingLanguage codingLanguage) {
-        return this.taskRepository.findAllByCodingLanguage(codingLanguage);
+        return taskRepository.findAllByCodingLanguage(codingLanguage);
     }
 
     @Override
     public boolean save(Task task) {
         try {
-            this.taskRepository.save(task);
+            taskRepository.save(task);
             return true;
         }
         catch (Exception e) {
@@ -93,7 +93,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public boolean delete(Long id) {
         try {
-            this.taskRepository.deleteById(id);
+            taskRepository.deleteById(id);
             return true;
         }
         catch (Exception e) {
@@ -105,7 +105,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public boolean deleteAllByName(String name) {
         try {
-            this.taskRepository.deleteAllByName(name);
+            taskRepository.deleteAllByName(name);
             return true;
         }
         catch (Exception e) {
