@@ -4,18 +4,15 @@ import dpapps.model.*;
 import dpapps.model.repository.*;
 import dpapps.model.repository.service.TaskNotificationService;
 import dpapps.model.repository.service.TaskService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -44,23 +41,30 @@ public class TaskTests {
     private final TaskService taskService;
 
     private final TaskNotificationService taskNotificationService;
+
+    private final TaskRepository taskRepository;
+
+
+    private final ProjectRepository projectRepository;
+
+    private final CodingLanguageRepository codingLanguageRepository;
+
+    private final UserRepository userRepository;
+
+    private final ArchivedTaskRepository archivedTaskRepository;
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private TaskNotificationRepository taskNotificationRepository;
-    @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private CodingLanguageRepository codingLanguageRepository;
-    @Autowired
-    private UserRepository userRepository;
+
 
     @Autowired
-    public TaskTests(TaskService taskService, TaskNotificationService taskNotificationService) {
+    public TaskTests(TaskService taskService, TaskNotificationService taskNotificationService, TaskRepository taskRepository, ProjectRepository projectRepository, CodingLanguageRepository codingLanguageRepository, UserRepository userRepository, ArchivedTaskRepository archivedTaskRepository) {
         this.taskService = taskService;
         this.taskNotificationService = taskNotificationService;
+        this.taskRepository = taskRepository;
+        this.projectRepository = projectRepository;
+        this.codingLanguageRepository = codingLanguageRepository;
+        this.userRepository = userRepository;
+        this.archivedTaskRepository = archivedTaskRepository;
     }
 
 
@@ -208,18 +212,16 @@ public class TaskTests {
 
         Task initialTask = taskService.findByName(testTaskName);
 
-        mockMvc.perform(post("/designer/tasks/complete/"+initialTask.getId()))
-                .andExpect(redirectedUrl("/designer/tasks/details/" + initialTask.getId()));
+        mockMvc.perform(post("/designer/tasks/complete/" + initialTask.getId()))
+                .andExpect(redirectedUrl("/designer/tasks?taskCompleted"));
 
-        Task completedTask = taskService.findByName(testTaskName);
+        ArchivedTask archivedTask = archivedTaskRepository.findByName(testTaskName).get();
 
-        assertTrue(initialTask.isCompleted() == false && completedTask.isCompleted());
+        assertTrue(initialTask.isCompleted() == false && archivedTask.isCompleted());
 
         cleanupTestTasks();
 
     }
-
-
 
     @Disabled
     @Test
@@ -237,7 +239,6 @@ public class TaskTests {
         Project project = projectRepository.findById(1L).get();
         CodingLanguage codingLanguage = codingLanguageRepository.findById(1L).get();
         User user = userRepository.findById(1L).get();
-
 
 
         newTask.setName(testTaskName);

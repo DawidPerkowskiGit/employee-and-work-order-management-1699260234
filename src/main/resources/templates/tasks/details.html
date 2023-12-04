@@ -15,10 +15,6 @@
 <div class="container mt-5">
     <h2>Task Details</h2>
 
-    <div th:if="${taskCompleted}" class="alert alert-success" role="alert">
-        <strong th:text="${taskCompleted}"></strong>
-    </div>
-
     <dl class="row">
         <dt class="col-sm-3">Name:</dt>
         <dd class="col-sm-9" th:text="${task.name}"></dd>
@@ -72,7 +68,5 @@
 
 
 </div>
-
-
 </body>
 </html>

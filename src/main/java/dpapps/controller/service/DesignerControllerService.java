@@ -23,5 +23,5 @@ public interface DesignerControllerService {
     /**
      * Completes the task
      */
-    String completeTask(Long id, RedirectAttributes redirectAttributes);
+    String completeTask(Long id);
 }
