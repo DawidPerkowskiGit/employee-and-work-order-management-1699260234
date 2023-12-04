@@ -38,6 +38,9 @@ public class Task {
     @Column(name = "task_id", unique = true)
     private String taskId;
 
+    @Column(name = "is_completed")
+    private boolean isCompleted = false;
+
     public Task() {
         taskId = UUID.randomUUID().toString();
     }
@@ -52,11 +55,13 @@ public class Task {
                 Objects.equals(description, task.description) &&
                 Objects.equals(project, task.project) &&
                 Objects.equals(codingLanguage, task.codingLanguage) &&
-                Objects.equals(user, task.user);
+                Objects.equals(user, task.user) &&
+                Objects.equals(taskId, task.taskId) &&
+                Objects.equals(isCompleted, task.isCompleted);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, project, codingLanguage, user);
+        return Objects.hash(id, name, description, project, codingLanguage, user, taskId, isCompleted);
     }
 }

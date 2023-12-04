@@ -4,6 +4,7 @@ import dpapps.exception.TaskNotFoundException;
 import dpapps.model.CodingLanguage;
 import dpapps.model.Project;
 import dpapps.model.Task;
+import dpapps.model.User;
 import dpapps.model.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,11 +112,23 @@ public class TaskServiceImpl implements TaskService{
         catch (Exception e) {
             logger.warn("Could not delete Tasks with name '" + name + "' from the database");
         }
-        return true;
+        return false;
     }
 
     @Override
     public List<Task> findAll() {
         return taskRepository.findAll();
+    }
+
+    @Override
+    public List<Task> findAllByUser(User user) {
+        return taskRepository.findTasksByUser(user);
+    }
+
+    @Override
+    public void setCompleted(Long id) {
+        Task task = findById(id);
+        task.setCompleted(true);
+        taskRepository.save(task);
     }
 }

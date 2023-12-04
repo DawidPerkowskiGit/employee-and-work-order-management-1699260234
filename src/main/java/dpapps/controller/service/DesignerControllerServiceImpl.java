@@ -2,21 +2,24 @@ package dpapps.controller.service;
 
 import dpapps.controller.service.templateservice.DesignerTemplateService;
 import dpapps.controller.service.templateservice.ErrorTemplateService;
+import dpapps.model.Task;
 import dpapps.model.TaskNotification;
 import dpapps.model.User;
 import dpapps.model.repository.service.TaskNotificationService;
+import dpapps.model.repository.service.TaskService;
 import dpapps.model.repository.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Service
 public class DesignerControllerServiceImpl implements DesignerControllerService{
 
-    private final DesignerTemplateService templateService;
+    private final DesignerTemplateService designerTemplateService;
 
     private final TaskNotificationService taskNotificationService;
 
@@ -26,11 +29,14 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
 
     private final ErrorTemplateService errorTemplateService;
 
-    public DesignerControllerServiceImpl(DesignerTemplateService templateService, TaskNotificationService taskNotificationService, UserService userService, ErrorTemplateService errorTemplateService) {
-        this.templateService = templateService;
+    private final TaskService taskService;
+
+    public DesignerControllerServiceImpl(DesignerTemplateService designerTemplateService, TaskNotificationService taskNotificationService, UserService userService, ErrorTemplateService errorTemplateService, TaskService taskService) {
+        this.designerTemplateService = designerTemplateService;
         this.taskNotificationService = taskNotificationService;
         this.userService = userService;
         this.errorTemplateService = errorTemplateService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -46,8 +52,41 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
 
         Long userId = user.getId();
         List<TaskNotification> notifications = taskNotificationService.getNotifications(userId);
-        taskNotificationService.setNotificationsNotNeededToDisplay(userId);
-        model.addAttribute("notifications", notifications);
-        return templateService.getDesignerPanelView(model);
+        if (!notifications.isEmpty()) {
+            if (notifications.get(0).isRequiresNotification()) {
+                taskNotificationService.setNotificationsNotNeededToDisplay(userId);
+                model.addAttribute("notifications", notifications);
+            }
+        }
+        return designerTemplateService.getDesignerPanelView(model);
+    }
+
+    @Override
+    public String getTasks(Model model) {
+        User user;
+        try {
+            user = userService.getAuthenticatedUser();
+        }
+        catch (Exception e) {
+            logger.warn("Could not find User");
+            return errorTemplateService.getNotFoundView();
+        }
+        List<Task> allTasks = taskService.findAllByUser(user);
+        model.addAttribute("tasks", allTasks);
+        return designerTemplateService.getTasksList(model);
+    }
+
+    @Override
+    public String getTaskDetails(Model model, Long id) {
+        Task task = taskService.findById(id);
+        model.addAttribute("task", task);
+        return designerTemplateService.getTaskDetails(model);
+    }
+
+    @Override
+    public String completeTask(Long id, RedirectAttributes redirectAttributes) {
+        taskService.setCompleted(id);
+        redirectAttributes.addFlashAttribute("taskCompleted", "Task was marked as completed!");
+        return designerTemplateService.getSuccessfulTaskCompletion(redirectAttributes, id);
     }
 }

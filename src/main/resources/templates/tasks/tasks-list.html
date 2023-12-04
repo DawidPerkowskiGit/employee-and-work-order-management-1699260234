@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Easy Work Manager</title>
@@ -34,6 +32,7 @@
             <th>Project</th>
             <th>Technology</th>
             <th>Assigned to</th>
+            <th>Completed?</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -44,10 +43,19 @@
             <td th:text="${task.project.name}"></td>
             <td th:text="${task.codingLanguage.name}"></td>
             <td th:text="${task.user.name}"></td>
+            <td th:text="${task.isCompleted}"></td>
             <td>
-                <form th:action="@{/operator/tasks/edit/{taskID}(taskID=${task.id})}" method="get">
-                    <button class="btn btn-primary" type="submit">Edit Task</button>
-                </form>
+                <div sec:authorize="hasRole('ROLE_OPERATOR')">
+                    <form th:action="@{/operator/tasks/edit/{taskID}(taskID=${task.id})}" method="get">
+                        <button class="btn btn-primary" type="submit">Edit Task</button>
+                    </form>
+                </div>
+
+                <div sec:authorize="hasRole('ROLE_DESIGNER')">
+                    <form th:action="@{/designer/tasks/details/{taskID}(taskID=${task.id})}" method="get">
+                        <button class="btn btn-primary" type="submit">View details</button>
+                    </form>
+                </div>
             </td>
         </tr>
         </tbody>

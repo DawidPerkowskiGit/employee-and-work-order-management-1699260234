@@ -3,6 +3,7 @@ package dpapps.model.repository.service;
 import dpapps.model.CodingLanguage;
 import dpapps.model.Project;
 import dpapps.model.Task;
+import dpapps.model.User;
 
 import java.util.List;
 
@@ -69,7 +70,17 @@ public interface TaskService {
 
     /**
      * Fetches all Tasks from persistence layer
-     * @return
      */
     List<Task> findAll();
+
+    /**
+     * Fetches this designer Tasks from persistence layer
+     */
+    List<Task> findAllByUser(User user);
+
+    /**
+     * Sets task status to completed
+     */
+
+    void setCompleted(Long id);
 }

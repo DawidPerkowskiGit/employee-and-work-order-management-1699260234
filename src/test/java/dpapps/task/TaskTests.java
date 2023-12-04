@@ -1,17 +1,17 @@
 package dpapps.task;
 
-import dpapps.model.Task;
-import dpapps.model.TaskNotification;
-import dpapps.model.repository.TaskNotificationRepository;
-import dpapps.model.repository.TaskRepository;
+import dpapps.model.*;
+import dpapps.model.repository.*;
 import dpapps.model.repository.service.TaskNotificationService;
 import dpapps.model.repository.service.TaskService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -50,6 +50,12 @@ public class TaskTests {
     private TaskRepository taskRepository;
     @Autowired
     private TaskNotificationRepository taskNotificationRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private CodingLanguageRepository codingLanguageRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     public TaskTests(TaskService taskService, TaskNotificationService taskNotificationService) {
@@ -154,14 +160,7 @@ public class TaskTests {
     @WithMockUser(username = "testUser", roles = "OPERATOR")
     public void testEditTaskSuccess() throws Exception {
 
-        mockMvc.perform(post("/operator/add-task")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param(paramName, testTaskName)
-                .param(paramDescription, testTaskDescription)
-                .param(paramProjectId, validProjectId)
-                .param(paramCodingLanguageId, validCodingLanguageId)
-                .param(paramUserId, validUserId)
-        );
+        addNewTask();
 
         Task initialTask = taskService.findByName(testTaskName);
         Long initialTaskId = initialTask.getId();
@@ -180,7 +179,9 @@ public class TaskTests {
 
         cleanupTestTasks();
 
-        assertTrue(!initialTask.equals(editedTask) && initialTask.getDescription().equals(testTaskDescription) && editedTask.getDescription().equals(modifiedDescription));
+        assertTrue(!initialTask.equals(editedTask) &&
+                initialTask.getDescription().equals(testTaskDescription) &&
+                editedTask.getDescription().equals(modifiedDescription));
 
     }
 
@@ -188,14 +189,7 @@ public class TaskTests {
     @WithMockUser(username = "testUser", roles = "OPERATOR")
     public void testTaskNotification() throws Exception {
 
-        mockMvc.perform(post("/operator/add-task")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param(paramName, testTaskName)
-                .param(paramDescription, testTaskDescription)
-                .param(paramProjectId, validProjectId)
-                .param(paramCodingLanguageId, validCodingLanguageId)
-                .param(paramUserId, validUserId)
-        );
+        addNewTask();
 
         Task task = taskService.findByName(testTaskName);
 
@@ -205,13 +199,55 @@ public class TaskTests {
         assertTrue(taskNotification.isRequiresNotification());
     }
 
+    @Test
+    @WithMockUser(username = "testUser", roles = "DESIGNER")
+    public void testShouldCompleteTask() throws Exception {
+
+
+        addNewTask();
+
+        Task initialTask = taskService.findByName(testTaskName);
+
+        mockMvc.perform(post("/designer/tasks/complete/"+initialTask.getId()))
+                .andExpect(redirectedUrl("/designer/tasks/details/" + initialTask.getId()));
+
+        Task completedTask = taskService.findByName(testTaskName);
+
+        assertTrue(initialTask.isCompleted() == false && completedTask.isCompleted());
+
+        cleanupTestTasks();
+
+    }
+
+
+
     @Disabled
     @Test
     public void turnOnNotifications() {
         taskNotificationService.setNotificationsNeededToDisplay(3L);
     }
-    private void cleanupTestTasks() {
+
+    @Test
+    public void cleanupTestTasks() {
         taskService.deleteAllByName(testTaskName);
+    }
+
+    private void addNewTask() {
+        Task newTask = new Task();
+        Project project = projectRepository.findById(1L).get();
+        CodingLanguage codingLanguage = codingLanguageRepository.findById(1L).get();
+        User user = userRepository.findById(1L).get();
+
+
+
+        newTask.setName(testTaskName);
+        newTask.setDescription(testTaskDescription);
+        newTask.setProject(new Project());
+        newTask.setUser(user);
+        newTask.setCodingLanguage(codingLanguage);
+        newTask.setProject(project);
+
+        taskRepository.save(newTask);
     }
 
 
