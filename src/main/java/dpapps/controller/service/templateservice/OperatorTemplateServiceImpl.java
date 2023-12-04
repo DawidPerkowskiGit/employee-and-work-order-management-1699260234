@@ -29,7 +29,7 @@ public class OperatorTemplateServiceImpl implements OperatorTemplateService{
 
     @Override
     public String getTasksList(Model model) {
-        return "operator/tasks-list";
+        return "tasks/tasks-list";
     }
 
     @Override

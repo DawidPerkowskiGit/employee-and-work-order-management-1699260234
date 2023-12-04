@@ -25,10 +25,6 @@ public interface OperatorTemplateService {
      */
     String getUnsuccessfulTaskCreationView(RedirectAttributes redirectAttributes);
 
-    /**
-     * Returns view with all tasks
-     */
-    String getTasksList(Model model);
 
     /**
      * Returns view where a task can be edited
@@ -44,4 +40,9 @@ public interface OperatorTemplateService {
      * Returns a view where task was not successfully edited
      */
     String getUnsuccessfulTaskEditView(RedirectAttributes redirectAttributes, Long id);
+
+    /**
+     * Returns view with all tasks
+     */
+    String getTasksList(Model model);
 }

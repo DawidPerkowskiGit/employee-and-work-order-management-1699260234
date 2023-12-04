@@ -14,6 +14,7 @@ public class OperatorController {
 
     private final OperatorControllerService controllerService;
 
+
     public OperatorController(OperatorControllerService controllerService) {
         this.controllerService = controllerService;
     }
@@ -33,11 +34,6 @@ public class OperatorController {
         return controllerService.saveTask(task, redirectAttributes);
     }
 
-    @GetMapping("/operator/tasks")
-    public String getTasksLists(Model model) {
-        return controllerService.getTasksList(model);
-    }
-
     @GetMapping("/operator/tasks/edit/{taskId}")
     public String editTask(@PathVariable Long taskId, RedirectAttributes redirectAttributes, Model model) {
         return controllerService.getEditTask(taskId, redirectAttributes, model);
@@ -46,5 +42,10 @@ public class OperatorController {
     @PostMapping("/operator/tasks/edit/save")
     public String saveEditedTask(Task task, RedirectAttributes redirectAttributes) {
         return controllerService.saveEditedTask(task, redirectAttributes);
+    }
+
+    @GetMapping("/operator/tasks")
+    public String getTasksLists(Model model) {
+        return controllerService.getTasksList(model);
     }
 }

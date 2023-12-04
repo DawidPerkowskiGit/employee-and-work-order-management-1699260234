@@ -22,23 +22,23 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
 
     private final TaskService taskService;
 
-    private final OperatorTemplateService templateService;
+    private final OperatorTemplateService operatorTemplateService;
 
     private final TaskNotificationService taskNotificationService;
 
-    public OperatorControllerServiceImpl(ProjectService projectService, CodingLanguageService codingLanguageService, UserService userService, TaskService taskService, OperatorTemplateService templateService, TaskNotificationService taskNotificationService) {
+    public OperatorControllerServiceImpl(ProjectService projectService, CodingLanguageService codingLanguageService, UserService userService, TaskService taskService, OperatorTemplateService operatorTemplateService, TaskNotificationService taskNotificationService) {
         this.projectService = projectService;
         this.codingLanguageService = codingLanguageService;
         this.userService = userService;
         this.taskService = taskService;
-        this.templateService = templateService;
+        this.operatorTemplateService = operatorTemplateService;
         this.taskNotificationService = taskNotificationService;
     }
 
 
     @Override
     public String getPanel() {
-        return templateService.getOperatorPanelView();
+        return operatorTemplateService.getOperatorPanelView();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
         model.addAttribute("projects", projectService.findAll());
         model.addAttribute("languages", codingLanguageService.findAll());
         model.addAttribute("users", userService.findAllByRole(RoleConstants.ROLE_DESIGNER));
-        return templateService.getNewTaskView(model);
+        return operatorTemplateService.getNewTaskView(model);
     }
 
     @Override
@@ -56,10 +56,10 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
         if (isTaskAdded) {
             notifyUser(task);
             redirectAttributes.addFlashAttribute("successMessage", "Task added successfully!");
-            return templateService.getSuccessfulTaskCreationView(redirectAttributes);
+            return operatorTemplateService.getSuccessfulTaskCreationView(redirectAttributes);
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Error adding task. Please try again.");
-            return templateService.getUnsuccessfulTaskCreationView(redirectAttributes);
+            return operatorTemplateService.getUnsuccessfulTaskCreationView(redirectAttributes);
         }
     }
 
@@ -67,7 +67,7 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
     public String getTasksList(Model model) {
         List<Task> allTasks = taskService.findAll();
         model.addAttribute("tasks", allTasks);
-        return templateService.getTasksList(model);
+        return operatorTemplateService.getTasksList(model);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
         model.addAttribute("projects", projectService.findAll());
         model.addAttribute("languages", codingLanguageService.findAll());
         model.addAttribute("users", userService.findAllByRole(RoleConstants.ROLE_DESIGNER));
-        return templateService.getEditTaskView(model);
+        return operatorTemplateService.getEditTaskView(model);
     }
 
     @Override
@@ -85,10 +85,10 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
         boolean isTaskAdded = taskService.save(task);
         if (isTaskAdded) {
             redirectAttributes.addFlashAttribute("successMessage", "Task edited successfully!");
-            return templateService.getSuccessfulTaskEditView(redirectAttributes, task.getId());
+            return operatorTemplateService.getSuccessfulTaskEditView(redirectAttributes, task.getId());
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Could not edit task. Please try again.");
-            return templateService.getUnsuccessfulTaskEditView(redirectAttributes, task.getId());
+            return operatorTemplateService.getUnsuccessfulTaskEditView(redirectAttributes, task.getId());
         }
     }
     
