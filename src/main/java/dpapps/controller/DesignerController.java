@@ -35,7 +35,7 @@ public class DesignerController {
     }
 
     @PostMapping("/designer/tasks/complete/{id}")
-    public String completeTasks(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        return controllerService.completeTask(id, redirectAttributes);
+    public String completeTasks(@PathVariable Long id) {
+        return controllerService.completeTask(id);
     }
 }

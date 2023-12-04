@@ -18,5 +18,5 @@ public interface DesignerTemplateService {
     String getTaskDetails(Model model);
 
 
-    String getSuccessfulTaskCompletion(RedirectAttributes redirectAttributes, Long id);
+    String getSuccessfulTaskCompletion();
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -73,6 +74,8 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
         }
         List<Task> allTasks = taskService.findAllByUser(user);
         model.addAttribute("tasks", allTasks);
+        List<Task> filteredTasks = new ArrayList<>();
+        model.addAttribute("filteredTasks", filteredTasks);
         return designerTemplateService.getTasksList(model);
     }
 
@@ -84,9 +87,8 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
     }
 
     @Override
-    public String completeTask(Long id, RedirectAttributes redirectAttributes) {
+    public String completeTask(Long id) {
         taskService.setCompleted(id);
-        redirectAttributes.addFlashAttribute("taskCompleted", "Task was marked as completed!");
-        return designerTemplateService.getSuccessfulTaskCompletion(redirectAttributes, id);
+        return designerTemplateService.getSuccessfulTaskCompletion();
     }
 }

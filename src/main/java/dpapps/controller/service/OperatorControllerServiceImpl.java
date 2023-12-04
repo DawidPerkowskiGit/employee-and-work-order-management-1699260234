@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -67,6 +68,8 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
     public String getTasksList(Model model) {
         List<Task> allTasks = taskService.findAll();
         model.addAttribute("tasks", allTasks);
+        List<Task> filteredTasks = new ArrayList<>();
+        model.addAttribute("filteredTasks", filteredTasks);
         return operatorTemplateService.getTasksList(model);
     }
 

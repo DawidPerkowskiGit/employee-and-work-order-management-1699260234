@@ -8,7 +8,6 @@ import dpapps.model.User;
 import dpapps.model.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +17,14 @@ public class TaskServiceImpl implements TaskService{
 
     private final TaskRepository taskRepository;
 
+    private final ArchivedTaskService archivedTaskService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, ArchivedTaskService archivedTaskService) {
         this.taskRepository = taskRepository;
+        this.archivedTaskService = archivedTaskService;
     }
 
     @Override
@@ -130,5 +132,6 @@ public class TaskServiceImpl implements TaskService{
         Task task = findById(id);
         task.setCompleted(true);
         taskRepository.save(task);
+        archivedTaskService.archiveTask(task);
     }
 }

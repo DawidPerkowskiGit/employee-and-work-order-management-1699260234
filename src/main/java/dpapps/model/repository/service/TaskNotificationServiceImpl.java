@@ -58,10 +58,17 @@ public class TaskNotificationServiceImpl implements TaskNotificationService{
     private void changeAllNotificationsStatus(Long userId, boolean status) {
         List<TaskNotification> usersTasks = this.getNotifications(userId);
 
-        for (TaskNotification notification: usersTasks
-        ) {
-            this.setNotificationStatus(notification, status);
+        if (status = false) {
+            taskNotificationRepository.deleteAll(usersTasks);
         }
+        else {
+            for (TaskNotification notification: usersTasks
+            ) {
+                this.setNotificationStatus(notification, status);
+            }
+        }
+
+
     }
 
     @Override

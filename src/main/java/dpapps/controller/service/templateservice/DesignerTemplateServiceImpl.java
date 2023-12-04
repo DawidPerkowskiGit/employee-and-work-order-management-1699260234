@@ -22,7 +22,7 @@ public class DesignerTemplateServiceImpl implements DesignerTemplateService{
     }
 
     @Override
-    public String getSuccessfulTaskCompletion(RedirectAttributes redirectAttributes, Long id) {
-        return "redirect:/designer/tasks/details/"+id;
+    public String getSuccessfulTaskCompletion() {
+        return "redirect:/designer/tasks?taskCompleted";
     }
 }

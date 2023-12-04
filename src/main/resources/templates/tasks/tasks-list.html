@@ -21,6 +21,10 @@
         <strong th:text="${errorMessage}"></strong>
     </div>
 
+    <div th:if="${param.taskCompleted}" class="alert alert-success" role="alert">
+        <strong>Task completed!</strong>
+    </div>
+
     <table class="table table-striped">
         <thead>
         <div class="table-header">
@@ -60,6 +64,7 @@
         </tr>
         </tbody>
     </table>
+
 </div>
 
 </body>
