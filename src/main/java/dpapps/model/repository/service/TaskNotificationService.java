@@ -3,6 +3,7 @@ package dpapps.model.repository.service;
 import dpapps.exception.TaskNotificationNotFoundException;
 import dpapps.model.Task;
 import dpapps.model.TaskNotification;
+import dpapps.model.User;
 
 import java.util.List;
 
@@ -18,19 +19,6 @@ public interface TaskNotificationService {
 
     List<TaskNotification> getNotifications(Long user_id);
 
-    /**
-     * Changes notification status
-     */
-    void setNotificationStatus(TaskNotification taskNotification, boolean status);
-    /**
-     * Changes all user's notification statuses not to be displayed.
-     */
-    void setNotificationsNotNeededToDisplay(Long userId);
-
-    /**
-     * Changes all user's notification statuses to be displayed.
-     */
-    void setNotificationsNeededToDisplay(Long userId);
 
     /**
      * Composes task notification based on Task
@@ -47,4 +35,16 @@ public interface TaskNotificationService {
      * Get task notification by task
      */
     TaskNotification getNotificationByTask(Task task) throws TaskNotificationNotFoundException;
+
+    /**
+     * Deletes notifications related to a user
+     */
+
+    void deleteNotifications(Long userId);
+
+    /**
+     * Deletes single notification based on id
+     */
+
+    void delete(TaskNotification notification);
 }

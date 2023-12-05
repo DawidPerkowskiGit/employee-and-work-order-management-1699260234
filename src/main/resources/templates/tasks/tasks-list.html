@@ -28,7 +28,7 @@
     <table class="table table-striped">
         <thead>
         <div class="table-header">
-            <h2>User Management</h2>
+            <h2>Pending tasks</h2>
         </div>
         <tr>
             <th>ID</th>
@@ -47,7 +47,10 @@
             <td th:text="${task.project.name}"></td>
             <td th:text="${task.codingLanguage.name}"></td>
             <td th:text="${task.user.name}"></td>
-            <td th:text="${task.isCompleted}"></td>
+            <td>
+                <span th:if="${task.isCompleted == true}">Yes</span>
+                <span th:if="${task.isCompleted == false}">No</span>
+            </td>
             <td>
                 <div sec:authorize="hasRole('ROLE_OPERATOR')">
                     <form th:action="@{/operator/tasks/edit/{taskID}(taskID=${task.id})}" method="get">

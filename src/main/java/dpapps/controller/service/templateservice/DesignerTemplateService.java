@@ -15,8 +15,18 @@ public interface DesignerTemplateService {
      */
     String getTasksList(Model model);
 
+    /**
+     * Displays task details view
+     */
     String getTaskDetails(Model model);
 
-
+    /**
+     * Returns task completed view
+     */
     String getSuccessfulTaskCompletion();
+
+    /**
+     * Returns view with completed tasks
+     */
+    String getCompletedTasks(Model model);
 }

@@ -27,14 +27,20 @@
         <div class="col">
             <div class="card" style="width: 16rem; height: 16rem;">
                 <div class="card-body">
-                    <h5 class="card-title"Your tasks</h5>
+                    <h5 class="card-title">Your tasks</h5>
                     <p class="card-text">View all your active tasks. Check their details and mark completion</p>
                     <a th:href="@{/designer/tasks}" class="btn btn-primary" style="bottom: 5px">View tasks</a>
                 </div>
             </div>
         </div>
         <div class="col">
-
+            <div class="card" style="width: 16rem; height: 16rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Completed tasks</h5>
+                    <p class="card-text">View completed tasks. You can view their review once operator submits it</p>
+                    <a th:href="@{/designer/archived}" class="btn btn-primary" style="bottom: 5px">View archived</a>
+                </div>
+            </div>
         </div>
         <div class="col">
 

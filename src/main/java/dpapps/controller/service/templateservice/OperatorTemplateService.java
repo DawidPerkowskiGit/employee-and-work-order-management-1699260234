@@ -8,7 +8,7 @@ public interface OperatorTemplateService {
     /**
      * Returns operator panel view template
      */
-    String getOperatorPanelView();
+    String getOperatorPanelView(Model model);
 
     /**
      * Returns add task view template
@@ -45,4 +45,19 @@ public interface OperatorTemplateService {
      * Returns view with all tasks
      */
     String getTasksList(Model model);
+
+    /**
+     * Returns review view
+     */
+    String getReviewView(Model model);
+
+    /**
+     * Returns view with archived tasks
+     */
+    String getArchived(Model model);
+
+    /**
+     * Returns review list with confirmation of review
+     */
+    String getReviewSubmitted();
 }

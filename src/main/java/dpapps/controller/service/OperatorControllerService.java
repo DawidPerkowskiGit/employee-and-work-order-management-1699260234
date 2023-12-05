@@ -1,5 +1,6 @@
 package dpapps.controller.service;
 
+import dpapps.model.ArchivedTask;
 import dpapps.model.Task;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -9,7 +10,7 @@ public interface OperatorControllerService {
     /**
      * Returns Operator panel view
      */
-    String getPanel();
+    String getPanel(Model model);
 
     /**
      * Returns add task view
@@ -35,4 +36,19 @@ public interface OperatorControllerService {
      * Saves edited task
      */
     String saveEditedTask(Task task, RedirectAttributes redirectAttributes);
+
+    /**
+     * Displays view where operator can submit a task review
+     */
+    String getReview(Long id, Model model);
+
+    /**
+     * Returns view with archived tasks
+     */
+    String getArchived(Model model);
+
+    /**
+     * Saves review in the database
+     */
+    String saveReview(ArchivedTask archivedTask);
 }

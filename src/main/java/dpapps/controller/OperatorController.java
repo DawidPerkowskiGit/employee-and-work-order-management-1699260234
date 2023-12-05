@@ -1,7 +1,9 @@
 package dpapps.controller;
 
 import dpapps.controller.service.OperatorControllerService;
+import dpapps.model.ArchivedTask;
 import dpapps.model.Task;
+import dpapps.model.TaskNotification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,8 @@ public class OperatorController {
     }
 
     @GetMapping("/operator/panel")
-    public String renerPanel() {
-        return controllerService.getPanel();
+    public String renerPanel(Model model) {
+        return controllerService.getPanel(model);
     }
 
     @GetMapping("/operator/add-task")
@@ -47,5 +49,22 @@ public class OperatorController {
     @GetMapping("/operator/tasks")
     public String getTasksLists(Model model) {
         return controllerService.getTasksList(model);
+    }
+
+    @GetMapping("/operator/archived")
+    public String getArchivedList(Model model) {
+        return controllerService.getArchived(model);
+    }
+
+
+
+    @GetMapping("/operator/archived/review/{id}")
+    public String getReviewView(@PathVariable Long id, Model model) {
+        return controllerService.getReview(id, model);
+    }
+
+    @PostMapping("/operator/archived/review/submit")
+    public String submitReview(ArchivedTask archivedTask) {
+        return controllerService.saveReview(archivedTask);
     }
 }

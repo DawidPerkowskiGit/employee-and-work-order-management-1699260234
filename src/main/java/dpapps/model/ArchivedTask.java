@@ -39,6 +39,10 @@ public class ArchivedTask {
     @Column(name = "is_completed")
     private boolean isCompleted;
 
+    @OneToOne
+    private TaskReview review;
+
+
     public ArchivedTask() {}
 
     public ArchivedTask(Task task) {
