@@ -2,9 +2,9 @@ package dpapps.task;
 
 import dpapps.model.*;
 import dpapps.model.repository.*;
+import dpapps.model.repository.service.ArchivedTaskNotificationService;
 import dpapps.model.repository.service.TaskNotificationService;
 import dpapps.model.repository.service.TaskService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -52,12 +52,16 @@ public class TaskTests {
     private final UserRepository userRepository;
 
     private final ArchivedTaskRepository archivedTaskRepository;
+
+    private final ArchivedTaskNotificationService archivedTaskNotificationService;
     @Autowired
     private MockMvc mockMvc;
+    private final ArchivedTaskNotificationRepository archivedTaskNotificationRepository;
+
 
 
     @Autowired
-    public TaskTests(TaskService taskService, TaskNotificationService taskNotificationService, TaskRepository taskRepository, ProjectRepository projectRepository, CodingLanguageRepository codingLanguageRepository, UserRepository userRepository, ArchivedTaskRepository archivedTaskRepository) {
+    public TaskTests(TaskService taskService, TaskNotificationService taskNotificationService, TaskRepository taskRepository, ProjectRepository projectRepository, CodingLanguageRepository codingLanguageRepository, UserRepository userRepository, ArchivedTaskRepository archivedTaskRepository, ArchivedTaskNotificationService archivedTaskNotificationService, ArchivedTaskNotificationRepository archivedTaskNotificationRepository) {
         this.taskService = taskService;
         this.taskNotificationService = taskNotificationService;
         this.taskRepository = taskRepository;
@@ -65,6 +69,8 @@ public class TaskTests {
         this.codingLanguageRepository = codingLanguageRepository;
         this.userRepository = userRepository;
         this.archivedTaskRepository = archivedTaskRepository;
+        this.archivedTaskNotificationService = archivedTaskNotificationService;
+        this.archivedTaskNotificationRepository = archivedTaskNotificationRepository;
     }
 
 
@@ -223,11 +229,35 @@ public class TaskTests {
 
     }
 
-    @Disabled
     @Test
-    public void turnOnNotifications() {
-        taskNotificationService.setNotificationsNeededToDisplay(3L);
+    @WithMockUser(username = "testUser", roles = "DESIGNER")
+    public void testShouldPrepareNotificationForCompletedTask() throws Exception {
+
+
+        addNewTask();
+
+        Task initialTask = taskService.findByName(testTaskName);
+
+        ArchivedTask archivedTask = new ArchivedTask();
+        archivedTask.setId(initialTask.getId());
+
+        boolean beforeCompletion = archivedTaskNotificationRepository.existsByArchivedTask(archivedTask);
+
+        mockMvc.perform(post("/designer/tasks/complete/" + initialTask.getId()))
+                .andExpect(redirectedUrl("/designer/tasks?taskCompleted"));
+
+        boolean afterCompletion = archivedTaskNotificationRepository.existsByArchivedTask(archivedTask);
+
+        archivedTaskNotificationService.removeByTaskId(initialTask.getId());
+
+        cleanupTestTasks();
+
+        assertTrue(beforeCompletion == false && afterCompletion == true);
+
     }
+
+
+
 
     @Test
     public void cleanupTestTasks() {

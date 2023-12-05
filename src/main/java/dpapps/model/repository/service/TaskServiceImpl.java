@@ -131,7 +131,7 @@ public class TaskServiceImpl implements TaskService{
     public void setCompleted(Long id) {
         Task task = findById(id);
         task.setCompleted(true);
-        taskRepository.save(task);
         archivedTaskService.archiveTask(task);
+        taskRepository.delete(task);
     }
 }

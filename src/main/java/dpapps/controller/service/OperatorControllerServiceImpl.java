@@ -2,14 +2,12 @@ package dpapps.controller.service;
 
 import dpapps.constants.RoleConstants;
 import dpapps.controller.service.templateservice.OperatorTemplateService;
-import dpapps.model.Task;
-import dpapps.model.TaskNotification;
+import dpapps.model.*;
 import dpapps.model.repository.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,19 +25,31 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
 
     private final TaskNotificationService taskNotificationService;
 
-    public OperatorControllerServiceImpl(ProjectService projectService, CodingLanguageService codingLanguageService, UserService userService, TaskService taskService, OperatorTemplateService operatorTemplateService, TaskNotificationService taskNotificationService) {
+    private final ArchivedTaskNotificationService archivedTaskNotificationService;
+
+    private final ArchivedTaskService archivedTaskService;
+
+    private final TaskReviewService taskReviewService;
+
+    public OperatorControllerServiceImpl(ProjectService projectService, CodingLanguageService codingLanguageService, UserService userService, TaskService taskService, OperatorTemplateService operatorTemplateService, TaskNotificationService taskNotificationService, ArchivedTaskNotificationService archivedTaskNotificationService, ArchivedTaskService archivedTaskService, TaskReviewService taskReviewService) {
         this.projectService = projectService;
         this.codingLanguageService = codingLanguageService;
         this.userService = userService;
         this.taskService = taskService;
         this.operatorTemplateService = operatorTemplateService;
         this.taskNotificationService = taskNotificationService;
+        this.archivedTaskNotificationService = archivedTaskNotificationService;
+        this.archivedTaskService = archivedTaskService;
+        this.taskReviewService = taskReviewService;
     }
 
 
     @Override
-    public String getPanel() {
-        return operatorTemplateService.getOperatorPanelView();
+    public String getPanel(Model model) {
+        List<ArchivedTaskNotification> archivedTaskNotifications = archivedTaskNotificationService.findAll();
+        model.addAttribute("archivedTaskNotifications", archivedTaskNotifications);
+        archivedTaskNotificationService.removeAll();
+        return operatorTemplateService.getOperatorPanelView(model);
     }
 
     @Override
@@ -68,8 +78,6 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
     public String getTasksList(Model model) {
         List<Task> allTasks = taskService.findAll();
         model.addAttribute("tasks", allTasks);
-        List<Task> filteredTasks = new ArrayList<>();
-        model.addAttribute("filteredTasks", filteredTasks);
         return operatorTemplateService.getTasksList(model);
     }
 
@@ -94,7 +102,32 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
             return operatorTemplateService.getUnsuccessfulTaskEditView(redirectAttributes, task.getId());
         }
     }
-    
+
+    @Override
+    public String getReview(Long id, Model model) {
+        TaskReview taskReview = new TaskReview();
+        ArchivedTask archivedTask = archivedTaskService.findTaskById(id);
+        archivedTask.setReview(taskReview);
+        model.addAttribute("archivedTask", archivedTask);
+        return operatorTemplateService.getReviewView(model);
+    }
+
+    @Override
+    public String getArchived(Model model) {
+        List<ArchivedTask> archivedTasks = archivedTaskService.findAll();
+        model.addAttribute("archivedTasks", archivedTasks);
+        return operatorTemplateService.getArchived(model);
+    }
+
+    @Override
+    public String saveReview(ArchivedTask archivedTask) {
+        ArchivedTask existingTask = archivedTaskService.findTaskById(archivedTask.getId());
+        existingTask.setReview(archivedTask.getReview());
+        taskReviewService.save(archivedTask.getReview());
+        archivedTaskService.save(existingTask);
+        return operatorTemplateService.getReviewSubmitted();
+    }
+
     private void notifyUser(Task task) {
         TaskNotification taskNotification = taskNotificationService.prepareNotification(task);
         taskNotificationService.save(taskNotification);

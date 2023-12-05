@@ -2,9 +2,11 @@ package dpapps.controller.service;
 
 import dpapps.controller.service.templateservice.DesignerTemplateService;
 import dpapps.controller.service.templateservice.ErrorTemplateService;
+import dpapps.model.ArchivedTask;
 import dpapps.model.Task;
 import dpapps.model.TaskNotification;
 import dpapps.model.User;
+import dpapps.model.repository.service.ArchivedTaskService;
 import dpapps.model.repository.service.TaskNotificationService;
 import dpapps.model.repository.service.TaskService;
 import dpapps.model.repository.service.UserService;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,15 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
 
     private final TaskService taskService;
 
-    public DesignerControllerServiceImpl(DesignerTemplateService designerTemplateService, TaskNotificationService taskNotificationService, UserService userService, ErrorTemplateService errorTemplateService, TaskService taskService) {
+    private final ArchivedTaskService archivedTaskService;
+
+    public DesignerControllerServiceImpl(DesignerTemplateService designerTemplateService, TaskNotificationService taskNotificationService, UserService userService, ErrorTemplateService errorTemplateService, TaskService taskService, ArchivedTaskService archivedTaskService) {
         this.designerTemplateService = designerTemplateService;
         this.taskNotificationService = taskNotificationService;
         this.userService = userService;
         this.errorTemplateService = errorTemplateService;
         this.taskService = taskService;
+        this.archivedTaskService = archivedTaskService;
     }
 
     @Override
@@ -53,12 +57,11 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
 
         Long userId = user.getId();
         List<TaskNotification> notifications = taskNotificationService.getNotifications(userId);
+        model.addAttribute("notifications", notifications);
         if (!notifications.isEmpty()) {
-            if (notifications.get(0).isRequiresNotification()) {
-                taskNotificationService.setNotificationsNotNeededToDisplay(userId);
-                model.addAttribute("notifications", notifications);
-            }
+            taskNotificationService.deleteNotifications(userId);
         }
+
         return designerTemplateService.getDesignerPanelView(model);
     }
 
@@ -90,5 +93,21 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
     public String completeTask(Long id) {
         taskService.setCompleted(id);
         return designerTemplateService.getSuccessfulTaskCompletion();
+    }
+
+    @Override
+    public String getCompletedTasks(Model model) {
+        User user;
+        try {
+            user = userService.getAuthenticatedUser();
+        }
+        catch (Exception e) {
+            logger.warn("User not found");
+            return errorTemplateService.getNotFoundView();
+        }
+
+        List<ArchivedTask> archivedTasks = archivedTaskService.findAllByDesigner(user);
+        model.addAttribute("archivedTasks", archivedTasks);
+        return designerTemplateService.getCompletedTasks(model);
     }
 }

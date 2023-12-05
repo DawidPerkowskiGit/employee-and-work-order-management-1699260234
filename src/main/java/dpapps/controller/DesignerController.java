@@ -38,4 +38,9 @@ public class DesignerController {
     public String completeTasks(@PathVariable Long id) {
         return controllerService.completeTask(id);
     }
+
+    @GetMapping("/designer/archived")
+    public String getCompletedTasks(Model model) {
+        return controllerService.getCompletedTasks(model);
+    }
 }

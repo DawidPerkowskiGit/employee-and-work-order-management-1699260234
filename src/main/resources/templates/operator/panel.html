@@ -17,8 +17,16 @@
 <div class="container">
     <div class="row">
         <h1 class="text-center"> Operator panel. </h1>
-
     </div>
+
+    <div class="row">
+        <div th:each="notification: ${archivedTaskNotifications}">
+            <div class="alert alert-info" role="alert">
+                <strong th:text="'Task ' + ${notification.archivedTask.name} + ' was completed!'"></strong>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <div class="card" style="width: 16rem; height: 16rem;">
@@ -32,9 +40,18 @@
         <div class="col">
             <div class="card" style="width: 16rem; height: 16rem;">
                 <div class="card-body">
-                    <h5 class="card-title">View all tasks</h5>
+                    <h5 class="card-title">View pending</h5>
                     <p class="card-text">View all the currently active tasks. You can view, edit and delete individual tasks.</p>
                     <a th:href="@{/operator/tasks}" class="btn btn-primary" style="bottom: 5px">View tasks</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" style="width: 16rem; height: 16rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Completed tasks</h5>
+                    <p class="card-text">View all users completed tasks. You can submit task review</p>
+                    <a th:href="@{/operator/archived}" class="btn btn-primary" style="bottom: 5px">View archived</a>
                 </div>
             </div>
         </div>

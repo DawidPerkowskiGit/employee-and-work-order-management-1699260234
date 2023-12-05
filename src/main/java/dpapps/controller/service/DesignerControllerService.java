@@ -24,4 +24,10 @@ public interface DesignerControllerService {
      * Completes the task
      */
     String completeTask(Long id);
+
+    /**
+     * View completed tasks
+     */
+
+    String getCompletedTasks(Model model);
 }

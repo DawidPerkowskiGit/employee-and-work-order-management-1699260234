@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class OperatorTemplateServiceImpl implements OperatorTemplateService{
 
     @Override
-    public String getOperatorPanelView() {
+    public String getOperatorPanelView(Model model) {
         return "operator/panel";
     }
 
@@ -31,6 +31,22 @@ public class OperatorTemplateServiceImpl implements OperatorTemplateService{
     public String getTasksList(Model model) {
         return "tasks/tasks-list";
     }
+
+    @Override
+    public String getReviewView(Model model) {
+        return "/operator/review";
+    }
+
+    @Override
+    public String getArchived(Model model) {
+        return "/tasks/archived";
+    }
+
+    @Override
+    public String getReviewSubmitted() {
+        return "redirect:/operator/archived?taskReviewed";
+    }
+
 
     @Override
     public String getEditTaskView(Model model) {

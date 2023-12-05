@@ -25,4 +25,9 @@ public class DesignerTemplateServiceImpl implements DesignerTemplateService{
     public String getSuccessfulTaskCompletion() {
         return "redirect:/designer/tasks?taskCompleted";
     }
+
+    @Override
+    public String getCompletedTasks(Model model) {
+        return "/tasks/archived";
+    }
 }
