@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Easy Work Manager</title>
@@ -31,12 +31,18 @@
             <h2>Pending tasks</h2>
         </div>
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Project</th>
-            <th>Technology</th>
-            <th>Assigned to</th>
-            <th>Completed?</th>
+            <th><a th:href="@{/operator/tasks?page=0&amp;size=10&amp;sortField=id&amp;sortOrder=asc}">Id</a></th>
+            <th><a th:href="@{/operator/tasks?page=0&amp;size=10&amp;sortField=name&amp;sortOrder=asc}">Name</a></th>
+            <th>
+                <a th:href="@{/operator/tasks?page=0&amp;size=10&amp;sortField=project.name&amp;sortOrder=asc}">Project</a>
+            </th>
+            <th><a th:href="@{/operator/tasks?page=0&amp;size=10&amp;sortField=codingLanguage.name&amp;sortOrder=asc}">Technology</a>
+            </th>
+            <th><a th:href="@{/operator/tasks?page=0&amp;size=10&amp;sortField=user.name&amp;sortOrder=asc}">Assigned
+                to</a></th>
+            <th>
+                <a th:href="@{/operator/tasks?page=0&amp;size=10&amp;sortField=isCompleted&amp;sortOrder=asc}">Completed</a>
+            </th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -68,6 +74,33 @@
         </tbody>
     </table>
 
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:unless="${currentPage == 0}">
+                <a class="page-link"
+                   th:href="@{/operator/tasks(page=0, size=${size}, sortField=${sortField}, sortOrder=${order}, userFilter=${userFilter}, projectFilter=${projectFilter}, languageFilter=${languageFilter})}">&lt;&lt;</a>
+            </li>
+            <li class="page-item" th:unless="${currentPage == 0}">
+                <a class="page-link"
+                   th:href="@{/operator/tasks(page=${currentPage - 1}, size=${size}, sortField=${sortField}, sortOrder=${order}, userFilter=${userFilter}, projectFilter=${projectFilter}, languageFilter=${languageFilter})}">&lt;</a>
+            </li>
+            <li class="page-item" th:each="page,iterStat : ${#numbers.sequence(0, totalPages - 1)}"
+                th:class="${currentPage == iterStat.index} ? 'active' : ''">
+                <a class="page-link"
+                   th:href="@{/operator/tasks(page=${iterStat.index}, size=${size}, sortField=${sortField}, sortOrder=${order}, userFilter=${userFilter}, projectFilter=${projectFilter}, languageFilter=${languageFilter})}"
+                   th:text="${iterStat.index + 1}"></a>
+            </li>
+            <li class="page-item" th:unless="${currentPage == totalPages - 1}">
+                <a class="page-link"
+                   th:href="@{/operator/tasks(page=${currentPage + 1}, size=${size}, sortField=${sortField}, sortOrder=${order}, userFilter=${userFilter}, projectFilter=${projectFilter}, languageFilter=${languageFilter})}">&gt;</a>
+            </li>
+            <li class="page-item" th:unless="${currentPage == totalPages - 1}">
+                <a class="page-link"
+                   th:href="@{/operator/tasks(page=${totalPages - 1}, size=${size}, sortField=${sortField}, sortOrder=${order}, userFilter=${userFilter}, projectFilter=${projectFilter}, languageFilter=${languageFilter})}">&gt;&gt;</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 </body>

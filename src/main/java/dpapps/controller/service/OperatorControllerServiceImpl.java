@@ -4,10 +4,15 @@ import dpapps.constants.RoleConstants;
 import dpapps.controller.service.templateservice.OperatorTemplateService;
 import dpapps.model.*;
 import dpapps.model.repository.service.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -78,6 +83,25 @@ public class OperatorControllerServiceImpl implements OperatorControllerService{
     public String getTasksList(Model model) {
         List<Task> allTasks = taskService.findAll();
         model.addAttribute("tasks", allTasks);
+        return operatorTemplateService.getTasksList(model);
+    }
+
+    @Override
+    public String getTasksList(int page,
+                               int size,
+                               String sortField,
+                               String sortOrder,
+                               String userFilter,
+                               String projectFilter,
+                               String languageFilter,
+                               Model model) {
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        Page<Task> tasks = taskService.getAllTasks(pageRequest, userFilter, projectFilter, languageFilter);
+        model.addAttribute("tasks", tasks.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", tasks.getTotalPages());
+        model.addAttribute("totalItems", tasks.getTotalElements());
         return operatorTemplateService.getTasksList(model);
     }
 

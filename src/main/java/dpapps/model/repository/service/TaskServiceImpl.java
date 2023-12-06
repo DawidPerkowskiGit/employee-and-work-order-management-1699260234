@@ -8,6 +8,8 @@ import dpapps.model.User;
 import dpapps.model.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -133,5 +135,12 @@ public class TaskServiceImpl implements TaskService{
         task.setCompleted(true);
         archivedTaskService.archiveTask(task);
         taskRepository.delete(task);
+    }
+
+    @Override
+    public Page<Task> getAllTasks(PageRequest pageRequest, String userFilter, String projectFilter, String languageFilter) {
+        System.out.println(userFilter);
+        Page<Task> pageTask = taskRepository.findAllTasks(userFilter, projectFilter, languageFilter, pageRequest);
+        return pageTask;
     }
 }

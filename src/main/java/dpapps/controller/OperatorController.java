@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -46,11 +47,6 @@ public class OperatorController {
         return controllerService.saveEditedTask(task, redirectAttributes);
     }
 
-    @GetMapping("/operator/tasks")
-    public String getTasksLists(Model model) {
-        return controllerService.getTasksList(model);
-    }
-
     @GetMapping("/operator/archived")
     public String getArchivedList(Model model) {
         return controllerService.getArchived(model);
@@ -66,5 +62,17 @@ public class OperatorController {
     @PostMapping("/operator/archived/review/submit")
     public String submitReview(ArchivedTask archivedTask) {
         return controllerService.saveReview(archivedTask);
+    }
+
+    @GetMapping("/operator/tasks")
+    public String getTasksLists(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "id") String sortField,
+                                @RequestParam(defaultValue = "asc") String sortOrder,
+                                @RequestParam(defaultValue = "") String userFilter,
+                                @RequestParam(defaultValue = "") String projectFilter,
+                                @RequestParam(defaultValue = "") String languageFilter,
+                                Model model) {
+        return controllerService.getTasksList(page, size, sortField, sortOrder, userFilter, projectFilter, languageFilter, model);
     }
 }
