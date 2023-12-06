@@ -12,6 +12,9 @@ import dpapps.model.repository.service.TaskService;
 import dpapps.model.repository.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -109,5 +112,24 @@ public class DesignerControllerServiceImpl implements DesignerControllerService{
         List<ArchivedTask> archivedTasks = archivedTaskService.findAllByDesigner(user);
         model.addAttribute("archivedTasks", archivedTasks);
         return designerTemplateService.getCompletedTasks(model);
+    }
+
+    @Override
+    public String getTasks(int page,
+                               int size,
+                               String sortField,
+                               String sortOrder,
+                               String userFilter,
+                               String projectFilter,
+                               String languageFilter,
+                               Model model) {
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        Page<Task> tasks = taskService.getAllTasks(pageRequest, userFilter, projectFilter, languageFilter);
+        model.addAttribute("tasks", tasks.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", tasks.getTotalPages());
+        model.addAttribute("totalItems", tasks.getTotalElements());
+        return designerTemplateService.getTasksList(model);
     }
 }

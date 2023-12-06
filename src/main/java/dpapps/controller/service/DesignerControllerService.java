@@ -30,4 +30,18 @@ public interface DesignerControllerService {
      */
 
     String getCompletedTasks(Model model);
+
+    /**
+     * Gets taks based on sorting and filtering requirements
+     * @return
+     */
+    public String getTasks(int page,
+                               int size,
+                               String sortField,
+                               String sortOrder,
+                               String userFilter,
+                               String projectFilter,
+                               String languageFilter,
+                               Model model);
+
 }

@@ -4,6 +4,8 @@ import dpapps.model.CodingLanguage;
 import dpapps.model.Project;
 import dpapps.model.Task;
 import dpapps.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -83,4 +85,9 @@ public interface TaskService {
      */
 
     void setCompleted(Long id);
+
+    /**
+     * Gets all tasks based on filtering and sorting
+     */
+    Page<Task> getAllTasks(PageRequest pageRequest, String userFilter, String projectFilter, String languageFilter);
 }
