@@ -2,8 +2,6 @@ package dpapps.model.repository.service;
 
 import dpapps.model.ArchivedTask;
 import dpapps.model.ArchivedTaskNotification;
-import dpapps.model.Task;
-import dpapps.model.TaskNotification;
 import dpapps.model.repository.ArchivedTaskNotificationRepository;
 import dpapps.model.repository.ArchivedTaskRepository;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ArchivedTaskNotificationServiceImpl implements ArchivedTaskNotificationService{
+public class ArchivedTaskNotificationServiceImpl implements ArchivedTaskNotificationService {
 
     private final ArchivedTaskNotificationRepository repository;
     private final ArchivedTaskRepository archivedTaskRepository;

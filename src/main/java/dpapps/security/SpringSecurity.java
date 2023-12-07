@@ -52,6 +52,7 @@ public class SpringSecurity {
                                 .requestMatchers("/designer/**").hasAuthority(RoleConstants.ROLE_DESIGNER)
                                 .requestMatchers("/profile/**").authenticated()
                                 .requestMatchers("/updateProfile").authenticated()
+                                .requestMatchers("/worktime/**").authenticated()
 
                 )
                 .formLogin(form -> form

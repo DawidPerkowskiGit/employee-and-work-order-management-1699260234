@@ -2,8 +2,6 @@ package dpapps.model.repository.service;
 
 import dpapps.model.ArchivedTask;
 import dpapps.model.ArchivedTaskNotification;
-import dpapps.model.Task;
-import dpapps.model.TaskNotification;
 
 import java.util.List;
 
