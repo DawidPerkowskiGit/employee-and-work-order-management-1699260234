@@ -35,7 +35,7 @@
 
             <li><a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/register}">Register</a></li>
 
-            <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/profile}">Profile</a></li>
+            <li><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/account}">Your account</a></li>
 
             <li><a class="nav-link" id="logoutLink" sec:authorize="isAuthenticated()" th:href="@{#}">Logout</a></li>
 

@@ -37,4 +37,9 @@ public interface UserManagementTemplateService {
      * Returns User profile view
      */
     String getUserProfileView(Model model);
+
+    /**
+     * Returns user account template view
+     */
+    String getMyAccount();
 }

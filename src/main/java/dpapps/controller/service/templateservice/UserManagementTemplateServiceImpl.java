@@ -8,22 +8,22 @@ public class UserManagementTemplateServiceImpl implements UserManagementTemplate
 
     @Override
     public String getRegisterView(Model model) {
-        return "register";
+        return "user/register";
     }
 
     @Override
     public String getAfterRegistrationView() {
-        return "after-registration";
+        return "user/after-registration";
     }
 
     @Override
     public String getLoginView() {
-        return "login";
+        return "user/login";
     }
 
     @Override
     public String getChangePasswordView(Model model) {
-        return "change-password";
+        return "user/change-password";
     }
 
     @Override
@@ -33,11 +33,16 @@ public class UserManagementTemplateServiceImpl implements UserManagementTemplate
 
     @Override
     public String getVerificationResultView() {
-        return "verification-result";
+        return "user/verification-result";
     }
 
     @Override
     public String getUserProfileView(Model model) {
-        return "profile";
+        return "user/profile";
+    }
+
+    @Override
+    public String getMyAccount() {
+        return "user/myaccount";
     }
 }

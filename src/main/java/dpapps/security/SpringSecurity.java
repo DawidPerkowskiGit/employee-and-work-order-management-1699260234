@@ -53,6 +53,7 @@ public class SpringSecurity {
                                 .requestMatchers("/profile/**").authenticated()
                                 .requestMatchers("/updateProfile").authenticated()
                                 .requestMatchers("/worktime/**").authenticated()
+                                .requestMatchers("/user/**").authenticated()
 
                 )
                 .formLogin(form -> form
