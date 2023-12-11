@@ -59,14 +59,19 @@ public class UserController {
         return controllerService.processUserVerification(code, model);
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/user/profile")
     public String getProfile(Model model) {
         return controllerService.getProfile(model);
     }
 
-    @PostMapping("/updateProfile")
+    @PostMapping("/user/updateProfile")
     public String updateProfile(@ModelAttribute User updatedUser, Model model) {
         return this.controllerService.updateProfile(updatedUser, model);
+    }
+
+    @GetMapping("/user/account")
+    public String getMyAccount() {
+        return controllerService.getMyAccount();
     }
 
 

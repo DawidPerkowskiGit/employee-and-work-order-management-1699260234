@@ -171,5 +171,10 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
         return templateService.getUserProfileView(model);
     }
 
+    @Override
+    public String getMyAccount() {
+        return templateService.getMyAccount();
+    }
+
 
 }

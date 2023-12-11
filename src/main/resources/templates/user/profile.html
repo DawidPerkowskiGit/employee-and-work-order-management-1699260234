@@ -26,7 +26,7 @@
         <h5 class="card-header">Your Profile</h5>
 
         <div class="card-body">
-            <form th:action="@{/updateProfile}" method="post" th:object="${user}">
+            <form th:action="@{/user/updateProfile}" method="post" th:object="${user}">
 
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="id" name="id" th:value="*{id}" readonly/>

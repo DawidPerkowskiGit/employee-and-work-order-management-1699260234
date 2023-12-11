@@ -26,13 +26,13 @@ public class WorkingLog {
     @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "start_time")
+    @Column(name = "start_time", columnDefinition = "TIME")
     private LocalTime startTime;
 
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "end_time")
+    @Column(name = "end_time", columnDefinition = "TIME")
     private LocalTime endTime;
 
     public WorkingLog() {}

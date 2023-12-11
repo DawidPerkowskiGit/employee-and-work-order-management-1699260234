@@ -50,4 +50,9 @@ public interface UserManagementControllerService {
      * Updated user profile data
      */
     String updateProfile(User updatedUser, Model model);
+
+    /**
+     * Returns user account main page
+     */
+    String getMyAccount();
 }
