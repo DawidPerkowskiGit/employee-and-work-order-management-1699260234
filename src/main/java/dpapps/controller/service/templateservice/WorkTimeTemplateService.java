@@ -18,4 +18,14 @@ public interface WorkTimeTemplateService {
      * Return work time panel after stopping work
      */
     String getStopWork(RedirectAttributes redirectAttributes);
+
+    /**
+     * Return work time panel after starting a break
+     */
+    String getStartBreak(RedirectAttributes redirectAttributes);
+
+    /**
+     * Return work time panel after stopping a break
+     */
+    String getStopBreak(RedirectAttributes redirectAttributes);
 }

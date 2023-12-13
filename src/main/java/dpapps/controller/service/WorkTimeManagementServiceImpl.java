@@ -2,8 +2,11 @@ package dpapps.controller.service;
 
 import dpapps.controller.service.templateservice.ErrorTemplateService;
 import dpapps.controller.service.templateservice.WorkTimeTemplateService;
+import dpapps.model.BreakLog;
 import dpapps.model.User;
 import dpapps.model.WorkingLog;
+import dpapps.model.repository.BreakLogRepository;
+import dpapps.model.repository.service.BreakLogService;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.WorkingLogService;
 import org.springframework.stereotype.Service;
@@ -25,11 +28,17 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
 
     private final ErrorTemplateService errorTemplateService;
 
-    public WorkTimeManagementServiceImpl(WorkTimeTemplateService workTimeTemplateService, WorkingLogService workingLogService, UserService userService, ErrorTemplateService errorTemplateService) {
+    private final BreakLogService breakLogService;
+    private final BreakLogRepository breakLogRepository;
+
+    public WorkTimeManagementServiceImpl(WorkTimeTemplateService workTimeTemplateService, WorkingLogService workingLogService, UserService userService, ErrorTemplateService errorTemplateService, BreakLogService breakLogService,
+                                         BreakLogRepository breakLogRepository) {
         this.workTimeTemplateService = workTimeTemplateService;
         this.workingLogService = workingLogService;
         this.userService = userService;
         this.errorTemplateService = errorTemplateService;
+        this.breakLogService = breakLogService;
+        this.breakLogRepository = breakLogRepository;
     }
 
     @Override
@@ -42,6 +51,8 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
         }
         WorkingLog latestEntry = workingLogService.findLatestEntry(user);
         model.addAttribute("latestEntry", latestEntry);
+        BreakLog breakLog = breakLogService.findLatestBreak(user);
+        model.addAttribute("latestBreak", breakLog);
         return workTimeTemplateService.getPanel(model);
     }
 
@@ -78,6 +89,66 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
         workingLogService.save(workingLog);
         redirectAttributes.addFlashAttribute("stopSuccessful", "You successfully clocked out!");
         return workTimeTemplateService.getStopWork(redirectAttributes);
+    }
+
+    @Override
+    public String startBreak(RedirectAttributes redirectAttributes) {
+        BreakLog breakLog = new BreakLog();
+
+        User user;
+        try {
+            user = userService.getAuthenticatedUser();
+        } catch (Exception e) {
+            return errorTemplateService.getNotFoundView();
+        }
+
+        WorkingLog workingLog = workingLogService.findLatestEntry(user);
+
+        if (workingLog.isClockedIn() == false || breakLog.isOnBreak()) {
+            redirectAttributes.addFlashAttribute("cantStartBreak", "You cant start your break since you are not working currently");
+            return workTimeTemplateService.getStartBreak(redirectAttributes);
+        }
+
+        breakLog.setUser(user);
+
+        breakLog.setStartTime(getCurrentTime());
+        breakLog.setStartDate(getCurrentDate());
+        breakLog.setOnBreak(true);
+
+        breakLogRepository.save(breakLog);
+
+        redirectAttributes.addFlashAttribute("breakStart", "You started your break!");
+
+        return workTimeTemplateService.getStartBreak(redirectAttributes);
+    }
+
+    @Override
+    public String stopBreak(RedirectAttributes redirectAttributes) {
+        User user;
+        try {
+            user = userService.getAuthenticatedUser();
+        } catch (Exception e) {
+            return errorTemplateService.getNotFoundView();
+        }
+
+        WorkingLog workingLog = workingLogService.findLatestEntry(user);
+        BreakLog breakLog = breakLogService.findLatestBreak(user);
+
+        if (workingLog.isClockedIn() == false || breakLog.isOnBreak() == false) {
+            redirectAttributes.addFlashAttribute("cantStopBreak", "You cant stop your break since you are not working currently");
+            return workTimeTemplateService.getStartBreak(redirectAttributes);
+        }
+
+
+
+        breakLog.setEndTime(getCurrentTime());
+        breakLog.setEndDate(getCurrentDate());
+        breakLog.setOnBreak(false);
+        breakLogService.save(breakLog);
+
+        redirectAttributes.addFlashAttribute("breakStop", "You stopped your break");
+
+        return workTimeTemplateService.getStopBreak(redirectAttributes);
     }
 
     private LocalTime getCurrentTime() {

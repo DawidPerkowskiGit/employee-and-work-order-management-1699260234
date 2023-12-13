@@ -39,4 +39,14 @@ public class WorkTimeController {
         return workTimeManagementService.stopWork(redirectAttributes);
     }
 
+    @PostMapping("/worktime/break/start")
+    public String startBreak(RedirectAttributes redirectAttributes) {
+        return workTimeManagementService.startBreak(redirectAttributes);
+    }
+
+    @PostMapping("/worktime/break/stop")
+    public String stopBreak(RedirectAttributes redirectAttributes) {
+        return workTimeManagementService.stopBreak(redirectAttributes);
+    }
+
 }

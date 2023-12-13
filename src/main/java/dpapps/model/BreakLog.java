@@ -20,6 +20,10 @@ public class BreakLog {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
+    @Column(name = "on_break")
+    private boolean onBreak = false;
+
     @Column(name = "start_date")
     private LocalDate startDate;
 
