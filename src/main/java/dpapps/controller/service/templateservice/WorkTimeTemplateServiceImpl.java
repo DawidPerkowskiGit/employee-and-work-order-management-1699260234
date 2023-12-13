@@ -20,4 +20,14 @@ public class WorkTimeTemplateServiceImpl implements WorkTimeTemplateService{
     public String getStopWork(RedirectAttributes redirectAttributes) {
         return "redirect:/worktime?stopSuccess";
     }
+
+    @Override
+    public String getStartBreak(RedirectAttributes redirectAttributes) {
+        return "redirect:/worktime?breakStart";
+    }
+
+    @Override
+    public String getStopBreak(RedirectAttributes redirectAttributes) {
+        return "redirect:/worktime?breakStop";
+    }
 }

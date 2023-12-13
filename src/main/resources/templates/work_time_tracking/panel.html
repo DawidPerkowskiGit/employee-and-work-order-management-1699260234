@@ -21,6 +21,22 @@
     <div th:if="${stopSuccessful}" class="alert alert-danger" role="alert">
         <strong th:text="${stopSuccessful}"></strong>
     </div>
+
+    <div th:if="${cantStartBreak}" class="alert alert-secondary" role="alert">
+        <strong th:text="${cantStartBreak}"></strong>
+    </div>
+
+    <div th:if="${breakStart}" class="alert alert-danger" role="alert">
+        <strong th:text="${breakStart}"></strong>
+    </div>
+
+    <div th:if="${cantStopBreak}" class="alert alert-secondary" role="alert">
+        <strong th:text="${cantStopBreak}"></strong>
+    </div>
+
+    <div th:if="${breakStop}" class="alert alert-danger" role="alert">
+        <strong th:text="${breakStop}"></strong>
+    </div>
     <h2>Latest Working Log</h2>
     <table class="table">
         <thead>
@@ -30,6 +46,7 @@
             <th>End Date</th>
             <th>End Time</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -69,14 +86,36 @@
             <td>
                 <div th:if="${latestEntry.clockedIn == true}">
                     <a> Work time is being logged in!</a>
-                    <form th:action="@{/worktime/stop}" method="post">
-                        <button type="submit" class="btn btn-primary">Stop</button>
-                    </form>
                 </div>
                 <div th:if="${latestEntry.clockedIn == false}">
                     <a> Work day not started</a>
+                </div>
+                <div th:if="${latestBreak.onBreak == true}">
+                    <a> You are taking a break</a>
+                </div>
+                <div th:if="${latestBreak.onBreak == false}">
+                    <a> You are not taking a break</a>
+                </div>
+            </td>
+            <td>
+                <div th:if="${latestEntry.clockedIn == true}">
+                    <form th:action="@{/worktime/stop}" method="post">
+                        <button type="submit" class="btn btn-danger">Clock out</button>
+                    </form>
+                </div>
+                <div th:if="${latestEntry.clockedIn == false}">
                     <form th:action="@{/worktime/start}" method="post">
-                        <button type="submit" class="btn btn-primary">Start</button>
+                        <button type="submit" class="btn btn-success">Clock in</button>
+                    </form>
+                </div>
+                <div th:if="${latestBreak.onBreak == true}">
+                    <form th:action="@{/worktime/break/stop}" method="post">
+                        <button type="submit" class="btn btn-danger">Stop break</button>
+                    </form>
+                </div>
+                <div th:if="${latestBreak.onBreak == false}">
+                    <form th:action="@{/worktime/break/start}" method="post">
+                        <button type="submit" class="btn btn-success">Start break</button>
                     </form>
                 </div>
             </td>

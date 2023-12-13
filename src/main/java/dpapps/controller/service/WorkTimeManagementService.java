@@ -19,4 +19,13 @@ public interface WorkTimeManagementService {
      * Stops work time logging
      */
     String stopWork(RedirectAttributes redirectAttributes);
+
+    /**
+     * Starts break logging
+     */
+    String startBreak(RedirectAttributes redirectAttributes);
+    /**
+     * Stops break logging
+     */
+    String stopBreak(RedirectAttributes redirectAttributes);
 }
