@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BreakLogRepository extends JpaRepository<BreakLog, Long> {
 
@@ -21,4 +23,8 @@ public interface BreakLogRepository extends JpaRepository<BreakLog, Long> {
 
     @Transactional
     void deleteBreakLogByUser(User user);
+
+    int countBreakLogByUser(User user);
+
+    List<BreakLog> findBreakLogByUser(User user);
 }

@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @Table(name = "break")
-public class BreakLog {
+public class BreakLog implements SeparateDateTimeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

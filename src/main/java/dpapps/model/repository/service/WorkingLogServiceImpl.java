@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class WorkingLogServiceImpl implements WorkingLogService {
 
@@ -46,5 +48,10 @@ public class WorkingLogServiceImpl implements WorkingLogService {
     @Override
     public void removeAllByUser(User user) {
         workingLogRepository.deleteWorkingLogByUser(user);
+    }
+
+    @Override
+    public List<WorkingLog> findAllByUser(User user) {
+        return workingLogRepository.findWorkingLogByUser(user);
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @Table(name = "work_log")
-public class WorkingLog {
+public class WorkingLog implements SeparateDateTimeModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
