@@ -3,6 +3,8 @@ package dpapps.model.repository.service;
 import dpapps.model.User;
 import dpapps.model.WorkingLog;
 
+import java.util.List;
+
 public interface WorkingLogService {
 
     /**
@@ -19,4 +21,9 @@ public interface WorkingLogService {
      * Remove all working logs for user
      */
     void removeAllByUser(User user);
+
+    /**
+     * Find user working logs
+     */
+    List<WorkingLog> findAllByUser(User user);
 }

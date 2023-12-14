@@ -9,6 +9,8 @@ import dpapps.model.repository.BreakLogRepository;
 import dpapps.model.repository.service.BreakLogService;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.WorkingLogService;
+import dpapps.tools.ListSeparateDateTimeCalculator;
+import dpapps.tools.SecondsToTimeConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class WorkTimeManagementServiceImpl implements WorkTimeManagementService {
@@ -53,6 +56,22 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
         model.addAttribute("latestEntry", latestEntry);
         BreakLog breakLog = breakLogService.findLatestBreak(user);
         model.addAttribute("latestBreak", breakLog);
+        int breaksTaken = breakLogService.countBreaks(user);
+        model.addAttribute("breaksTaken", breaksTaken);
+
+        List<WorkingLog> allWorkingLogs = workingLogService.findAllByUser(user);
+        ListSeparateDateTimeCalculator calc = new ListSeparateDateTimeCalculator();
+        long timeWorked = calc.calculateWorktime(allWorkingLogs);
+
+        List<BreakLog> allBreaks = breakLogService.findAllByUser(user);
+        long timeOnBreak = calc.calculateBreaks(allBreaks);
+
+        long timeWorkedWithoutBreaks = timeWorked - timeOnBreak;
+
+        SecondsToTimeConverter secondsToTimeConverter = new SecondsToTimeConverter(timeWorkedWithoutBreaks);
+        model.addAttribute("timeWorked", secondsToTimeConverter);
+
+
         return workTimeTemplateService.getPanel(model);
     }
 

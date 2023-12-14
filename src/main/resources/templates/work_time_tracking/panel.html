@@ -108,12 +108,12 @@
                         <button type="submit" class="btn btn-success">Clock in</button>
                     </form>
                 </div>
-                <div th:if="${latestBreak.onBreak == true}">
+                <div th:if="${latestBreak.onBreak == true && latestEntry.clockedIn == true}">
                     <form th:action="@{/worktime/break/stop}" method="post">
                         <button type="submit" class="btn btn-danger">Stop break</button>
                     </form>
                 </div>
-                <div th:if="${latestBreak.onBreak == false}">
+                <div th:if="${latestBreak.onBreak == false && latestEntry.clockedIn == true}">
                     <form th:action="@{/worktime/break/start}" method="post">
                         <button type="submit" class="btn btn-success">Start break</button>
                     </form>
@@ -122,6 +122,12 @@
         </tr>
         </tbody>
     </table>
+
+    <div class="container">
+        <strong th:text="'Total breaks taken: ' + ${breaksTaken}"></strong>
+        <br>
+        <strong th:text="'Time worked: ' + ${timeWorked.hours} + 'h ' + ${timeWorked.minutes} + 'm ' + ${timeWorked.seconds} + 's '"></strong>
+    </div>
 
 
 </div>

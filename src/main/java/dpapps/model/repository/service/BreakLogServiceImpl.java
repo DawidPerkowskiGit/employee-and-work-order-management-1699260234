@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BreakLogServiceImpl implements BreakLogService {
 
@@ -34,5 +36,16 @@ public class BreakLogServiceImpl implements BreakLogService {
             logger.warn("This users' break list is empty");
         }
         return new BreakLog();
+    }
+
+
+    @Override
+    public int countBreaks(User user) {
+        return breakLogRepository.countBreakLogByUser(user);
+    }
+
+    @Override
+    public List<BreakLog> findAllByUser(User user) {
+        return breakLogRepository.findBreakLogByUser(user);
     }
 }
