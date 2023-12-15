@@ -30,4 +30,9 @@ public class WorkTimeTemplateServiceImpl implements WorkTimeTemplateService{
     public String getStopBreak(RedirectAttributes redirectAttributes) {
         return "redirect:/worktime?breakStop";
     }
+
+    @Override
+    public String getWorkingLogs(Model model) {
+        return "/work_time_tracking/logs";
+    }
 }

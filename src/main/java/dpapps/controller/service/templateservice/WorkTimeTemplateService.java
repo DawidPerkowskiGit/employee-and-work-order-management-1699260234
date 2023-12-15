@@ -28,4 +28,9 @@ public interface WorkTimeTemplateService {
      * Return work time panel after stopping a break
      */
     String getStopBreak(RedirectAttributes redirectAttributes);
+
+    /**
+     * Return all working logs view
+     */
+    String getWorkingLogs(Model model);
 }

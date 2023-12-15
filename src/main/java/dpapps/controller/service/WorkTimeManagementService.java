@@ -28,4 +28,9 @@ public interface WorkTimeManagementService {
      * Stops break logging
      */
     String stopBreak(RedirectAttributes redirectAttributes);
+
+    /**
+     * Get all user logs
+     */
+    String getLogs(Model model);
 }

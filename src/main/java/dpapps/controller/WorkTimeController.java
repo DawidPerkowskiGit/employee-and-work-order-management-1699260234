@@ -49,4 +49,9 @@ public class WorkTimeController {
         return workTimeManagementService.stopBreak(redirectAttributes);
     }
 
+    @GetMapping("/worktime/logs")
+    public String getWorkTimeLogs(Model model) {
+        return workTimeManagementService.getLogs(model);
+    }
+
 }

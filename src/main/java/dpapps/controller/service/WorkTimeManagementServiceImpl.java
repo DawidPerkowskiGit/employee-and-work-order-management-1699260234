@@ -6,6 +6,7 @@ import dpapps.model.BreakLog;
 import dpapps.model.User;
 import dpapps.model.WorkingLog;
 import dpapps.model.repository.BreakLogRepository;
+import dpapps.model.repository.WorkingLogRepository;
 import dpapps.model.repository.service.BreakLogService;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.WorkingLogService;
@@ -33,15 +34,18 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
 
     private final BreakLogService breakLogService;
     private final BreakLogRepository breakLogRepository;
+    private final WorkingLogRepository workingLogRepository;
 
     public WorkTimeManagementServiceImpl(WorkTimeTemplateService workTimeTemplateService, WorkingLogService workingLogService, UserService userService, ErrorTemplateService errorTemplateService, BreakLogService breakLogService,
-                                         BreakLogRepository breakLogRepository) {
+                                         BreakLogRepository breakLogRepository,
+                                         WorkingLogRepository workingLogRepository) {
         this.workTimeTemplateService = workTimeTemplateService;
         this.workingLogService = workingLogService;
         this.userService = userService;
         this.errorTemplateService = errorTemplateService;
         this.breakLogService = breakLogService;
         this.breakLogRepository = breakLogRepository;
+        this.workingLogRepository = workingLogRepository;
     }
 
     @Override
@@ -168,6 +172,20 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
         redirectAttributes.addFlashAttribute("breakStop", "You stopped your break");
 
         return workTimeTemplateService.getStopBreak(redirectAttributes);
+    }
+
+    @Override
+    public String getLogs(Model model) {
+        User user;
+        try {
+            user = userService.getAuthenticatedUser();
+        } catch (Exception e) {
+            return errorTemplateService.getNotFoundView();
+        }
+        List<WorkingLog> workingLogs = workingLogRepository.findWorkingLogByUser(user);
+
+        model.addAttribute("workingLogs", workingLogs);
+        return workTimeTemplateService.getWorkingLogs(model);
     }
 
     private LocalTime getCurrentTime() {
