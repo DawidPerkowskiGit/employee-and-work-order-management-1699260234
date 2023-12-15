@@ -54,6 +54,7 @@ public class SpringSecurity {
                                 .requestMatchers("/updateProfile").authenticated()
                                 .requestMatchers("/worktime/**").authenticated()
                                 .requestMatchers("/user/**").authenticated()
+                                .anyRequest().permitAll()
 
                 )
                 .formLogin(form -> form
