@@ -19,25 +19,30 @@
         <table class="table table-striped">
             <thead>
             <div class="table-header">
-                <h2>Your working logs</h2>
+                <h2>Your working time logs</h2>
             </div>
             <tr>
-            <th>Start date</th>
-            <th>Start time</th>
-            <th>End date</th>
-            <th>End time</th>
-            <th>Time worked</th>
-            <th>Issue</th>
+                <th>Start date</th>
+                <th>Start time</th>
+                <th>End date</th>
+                <th>End time</th>
+                <th>Time worked</th>
+                <th>Issue</th>
             </tr>
 
             </thead>
 
             <tbody>
-            <tr th:each="log : ${workingLogs}">
-                <td th:text="${log.startDate}"></td>
-                <td th:text="${log.startTime}"></td>
-                <td th:text="${log.endDate}"></td>
-                <td th:text="${log.endDate}"></td>
+            <tr th:each="workingLog : ${workingLogs}">
+                <td th:text="${workingLog.log.startDate}"></td>
+                <td th:text="${workingLog.log.startTime}"></td>
+                <td th:text="${workingLog.log.endDate}"></td>
+                <td th:text="${workingLog.log.endTime}"></td>
+                <td th:text="${workingLog.time.readableTime}"></td>
+                <td th:if="${workingLog.issue != null}">
+                    <a th:text="${workingLog.issue.reason}"></a>
+                </td>
+            </tr>
 
             </tbody>
         </table>
