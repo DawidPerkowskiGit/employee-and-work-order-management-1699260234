@@ -1,17 +1,17 @@
 package dpapps.controller.service;
 
+import dpapps.constants.AppConstants;
 import dpapps.controller.service.templateservice.ErrorTemplateService;
 import dpapps.controller.service.templateservice.WorkTimeTemplateService;
-import dpapps.model.BreakLog;
-import dpapps.model.User;
-import dpapps.model.WorkingLog;
+import dpapps.model.*;
 import dpapps.model.repository.BreakLogRepository;
 import dpapps.model.repository.WorkingLogRepository;
 import dpapps.model.repository.service.BreakLogService;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.WorkingLogService;
 import dpapps.tools.ListSeparateDateTimeCalculator;
-import dpapps.tools.SecondsToTimeConverter;
+import dpapps.tools.ReadableTimeFormat;
+import dpapps.tools.SeparateDateTimeCalculator;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -72,8 +73,8 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
 
         long timeWorkedWithoutBreaks = timeWorked - timeOnBreak;
 
-        SecondsToTimeConverter secondsToTimeConverter = new SecondsToTimeConverter(timeWorkedWithoutBreaks);
-        model.addAttribute("timeWorked", secondsToTimeConverter);
+        ReadableTimeFormat readableTimeFormat = new ReadableTimeFormat(timeWorkedWithoutBreaks);
+        model.addAttribute("timeWorked", readableTimeFormat);
 
 
         return workTimeTemplateService.getPanel(model);
@@ -184,7 +185,30 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
         }
         List<WorkingLog> workingLogs = workingLogRepository.findWorkingLogByUser(user);
 
-        model.addAttribute("workingLogs", workingLogs);
+        List<ProcessedWorkingLog> processedLogs = new ArrayList<>();
+
+
+
+        for (WorkingLog log : workingLogs
+             ) {
+            ProcessedWorkingLog processedWorkingLog = new ProcessedWorkingLog();
+            processedWorkingLog.setLog(log);
+            SeparateDateTimeCalculator calculator = new SeparateDateTimeCalculator(log);
+
+            long timeWorked = calculator.timeSpanSeconds();
+            ReadableTimeFormat readableTimeFormat = new ReadableTimeFormat(timeWorked);
+            processedWorkingLog.setTime(readableTimeFormat);
+
+            if (readableTimeFormat.getHours() < AppConstants.DAILY_WORKED_HOURS) {
+                WorkingTimeIssue issue = new WorkingTimeIssue();
+                issue.setReason("Anomalous working time entry.");
+                processedWorkingLog.setIssue(issue);
+            }
+
+            processedLogs.add(processedWorkingLog);
+        }
+
+        model.addAttribute("workingLogs", processedLogs);
         return workTimeTemplateService.getWorkingLogs(model);
     }
 
