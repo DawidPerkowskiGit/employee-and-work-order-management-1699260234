@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +26,6 @@ public interface WorkingLogRepository extends JpaRepository<WorkingLog, Long> {
     void deleteWorkingLogByUser(User user);
 
     List<WorkingLog> findWorkingLogByUser(User user);
+
+    List<WorkingLog> findWorkingLogByUserAndStartDateBetween(User user, LocalDate startDate, LocalDate endDate);
 }
