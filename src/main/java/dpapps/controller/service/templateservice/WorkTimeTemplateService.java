@@ -1,5 +1,6 @@
 package dpapps.controller.service.templateservice;
 
+import dpapps.model.WorkingLogsForm;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,4 +34,5 @@ public interface WorkTimeTemplateService {
      * Return all working logs view
      */
     String getWorkingLogs(Model model);
+
 }

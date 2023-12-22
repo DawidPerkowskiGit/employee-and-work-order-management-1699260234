@@ -1,5 +1,6 @@
 package dpapps.controller.service;
 
+import dpapps.model.WorkingLogsForm;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,4 +34,9 @@ public interface WorkTimeManagementService {
      * Get all user logs
      */
     String getLogs(Model model);
+
+    /**
+     * Gets filtered Working logs
+     */
+    String getDateFilteredLogs(String startDate, String endDate, Model model);
 }

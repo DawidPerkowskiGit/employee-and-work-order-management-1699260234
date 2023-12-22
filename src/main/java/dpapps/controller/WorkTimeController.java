@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -52,6 +53,13 @@ public class WorkTimeController {
     @GetMapping("/worktime/logs")
     public String getWorkTimeLogs(Model model) {
         return workTimeManagementService.getLogs(model);
+    }
+
+    @PostMapping("/worktime/logs")
+    public String fetchWorkingLogs(@RequestParam("startDate") String startDate,
+                                   @RequestParam("endDate") String endDate,
+                                   Model model) {
+        return workTimeManagementService.getDateFilteredLogs(startDate, endDate, model);
     }
 
 }

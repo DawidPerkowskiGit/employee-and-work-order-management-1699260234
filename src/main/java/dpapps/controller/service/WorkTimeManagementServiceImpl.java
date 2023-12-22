@@ -1,6 +1,7 @@
 package dpapps.controller.service;
 
 import dpapps.constants.AppConstants;
+import dpapps.constants.DateConstants;
 import dpapps.controller.service.templateservice.ErrorTemplateService;
 import dpapps.controller.service.templateservice.WorkTimeTemplateService;
 import dpapps.model.*;
@@ -12,6 +13,7 @@ import dpapps.model.repository.service.WorkingLogService;
 import dpapps.tools.ListSeparateDateTimeCalculator;
 import dpapps.tools.ReadableTimeFormat;
 import dpapps.tools.SeparateDateTimeCalculator;
+import dpapps.tools.StringToLocalDateConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -164,7 +166,6 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
         }
 
 
-
         breakLog.setEndTime(getCurrentTime());
         breakLog.setEndDate(getCurrentDate());
         breakLog.setOnBreak(false);
@@ -188,9 +189,54 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
         List<ProcessedWorkingLog> processedLogs = new ArrayList<>();
 
 
+        for (WorkingLog log : workingLogs
+        ) {
+            ProcessedWorkingLog processedWorkingLog = new ProcessedWorkingLog();
+            processedWorkingLog.setLog(log);
+            SeparateDateTimeCalculator calculator = new SeparateDateTimeCalculator(log);
+
+            long timeWorked = calculator.timeSpanSeconds();
+            ReadableTimeFormat readableTimeFormat = new ReadableTimeFormat(timeWorked);
+            processedWorkingLog.setTime(readableTimeFormat);
+
+            if (readableTimeFormat.getHours() < AppConstants.DAILY_WORKED_HOURS) {
+                WorkingTimeIssue issue = new WorkingTimeIssue();
+                issue.setReason("Anomalous working time entry.");
+                processedWorkingLog.setIssue(issue);
+            }
+
+            processedLogs.add(processedWorkingLog);
+        }
+        WorkingLogsForm workingLogsForm = new WorkingLogsForm();
+        model.addAttribute("workingLogsForm", workingLogsForm);
+        model.addAttribute("workingLogs", processedLogs);
+        return workTimeTemplateService.getWorkingLogs(model);
+    }
+
+    @Override
+    public String getDateFilteredLogs(String startDate, String endDate, Model model) {
+        User user;
+        try {
+            user = userService.getAuthenticatedUser();
+        } catch (Exception e) {
+            return errorTemplateService.getNotFoundView();
+        }
+
+        WorkingLogsForm workingLogsForm = new WorkingLogsForm();
+        StringToLocalDateConverter stringToLocalDateConverter = new StringToLocalDateConverter(DateConstants.DATE_FORMAT);
+        LocalDate startDateFormat = stringToLocalDateConverter.convert(startDate);
+        workingLogsForm.setStartDate(startDateFormat);
+        LocalDate endDateFormat = stringToLocalDateConverter.convert(endDate);
+        workingLogsForm.setEndDate(endDateFormat);
+
+
+        List<WorkingLog> workingLogs = workingLogRepository.findWorkingLogByUserAndStartDateBetween(user, workingLogsForm.getStartDate(), workingLogsForm.getEndDate());
+
+        List<ProcessedWorkingLog> processedLogs = new ArrayList<>();
+
 
         for (WorkingLog log : workingLogs
-             ) {
+        ) {
             ProcessedWorkingLog processedWorkingLog = new ProcessedWorkingLog();
             processedWorkingLog.setLog(log);
             SeparateDateTimeCalculator calculator = new SeparateDateTimeCalculator(log);
