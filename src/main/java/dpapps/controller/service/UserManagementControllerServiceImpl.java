@@ -44,6 +44,12 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
     public String processRegister(UserDto userDto, BindingResult result, Model model) {
         User existingUser;
 
+        if (!userService.existsByLogin(userDto.getLogin())) {
+            userService.add(userDto);
+            setupVerification(userDto.getLogin());
+            return templateService.getAfterRegistrationView();
+        }
+
         try {
             existingUser = userService.findByLogin(userDto.getLogin());
         }
@@ -60,12 +66,6 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
             model.addAttribute("user", userDto);
             return templateService.getRegisterView(model);
         }
-
-
-        userService.add(userDto);
-
-        setupVerification(userDto.getLogin());
-
         return templateService.getAfterRegistrationView();
     }
 
