@@ -2,6 +2,8 @@ package dpapps.tools;
 
 import dpapps.constants.EmailServiceConstants;
 import dpapps.variables.EmailServiceVars;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Component;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender emailSender;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public EmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
@@ -31,16 +35,14 @@ public class EmailServiceImpl implements EmailService {
                 return true;
             }
             catch (MailException e) {
-                System.out.println("Could not send an email");
-                e.printStackTrace();
+                logger.warn("Could not send an email");
             }
             catch (Exception e) {
-                System.out.println("Could not perform an action during sending email procedure");
-                e.printStackTrace();
+                logger.warn("Could not perform an action during sending email procedure");
             }
         }
         else {
-            System.out.println("Reached daily maximum count of emails sent. Cannot send more emails");
+            logger.warn("Reached daily maximum count of emails sent. Cannot send more emails");
         }
         return false;
     }

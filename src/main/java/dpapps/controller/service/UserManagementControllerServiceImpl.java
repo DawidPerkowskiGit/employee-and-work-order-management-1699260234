@@ -162,12 +162,10 @@ public class UserManagementControllerServiceImpl implements UserManagementContro
             model.addAttribute("successMessage", "Your profile was updated successfully!");
         }
         catch (UserCouldNotBeSavedInTheDatabaseException e) {
-            //logger needed
-            System.out.println("Could not update your profile");
+            logger.info("Could not update your profile");
             model.addAttribute("errorMessage", "Could not update your profile");
         }
-
-
+        
         return templateService.getUserProfileView(model);
     }
 
