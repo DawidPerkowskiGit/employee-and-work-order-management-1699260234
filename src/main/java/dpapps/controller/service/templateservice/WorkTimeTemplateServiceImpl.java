@@ -34,6 +34,6 @@ public class WorkTimeTemplateServiceImpl implements WorkTimeTemplateService{
 
     @Override
     public String getWorkingLogs(Model model) {
-        return "/work_time_tracking/logs";
+        return "work_time_tracking/logs";
     }
 }
