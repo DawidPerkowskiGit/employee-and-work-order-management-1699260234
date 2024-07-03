@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class WorkTimeTemplateServiceImpl implements WorkTimeTemplateService{
     @Override
     public String getPanel(Model model) {
-        return "/work_time_tracking/panel";
+        return "work_time_tracking/panel";
     }
 
     @Override
