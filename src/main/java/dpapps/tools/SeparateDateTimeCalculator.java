@@ -15,6 +15,10 @@ public class SeparateDateTimeCalculator {
     private LocalDateTime endDate;
 
     public SeparateDateTimeCalculator(WorkingLog workingLog) {
+
+        boolean nullEndDate = false;
+        boolean nullEndTime = false;
+
         int startYear = workingLog.getStartDate().getYear();
         int startMonth = workingLog.getStartDate().getMonthValue();
         int startDay = workingLog.getStartDate().getDayOfMonth();
@@ -27,9 +31,11 @@ public class SeparateDateTimeCalculator {
 
         if (workingLog.getEndTime() == null) {
             workingLog.setEndTime(LocalTime.now());
+            nullEndTime = true;
         }
         if (workingLog.getEndDate() == null) {
             workingLog.setEndDate(LocalDate.now());
+            nullEndDate = true;
         }
 
         int endYear = workingLog.getEndDate().getYear();
@@ -41,6 +47,13 @@ public class SeparateDateTimeCalculator {
         int endSecond = workingLog.getEndTime().getSecond();
 
         this.endDate = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute, endSecond);
+        if (nullEndTime) {
+            workingLog.setEndTime(null);
+        }
+
+        if (nullEndDate) {
+            workingLog.setEndDate(null);
+        }
     }
 
     public SeparateDateTimeCalculator(BreakLog breakLog) {
