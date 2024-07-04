@@ -10,10 +10,7 @@ import dpapps.model.repository.WorkingLogRepository;
 import dpapps.model.repository.service.BreakLogService;
 import dpapps.model.repository.service.UserService;
 import dpapps.model.repository.service.WorkingLogService;
-import dpapps.tools.ListSeparateDateTimeCalculator;
-import dpapps.tools.ReadableTimeFormat;
-import dpapps.tools.SeparateDateTimeCalculator;
-import dpapps.tools.StringToLocalDateConverter;
+import dpapps.tools.*;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -259,15 +256,16 @@ public class WorkTimeManagementServiceImpl implements WorkTimeManagementService 
     }
 
     private LocalTime getCurrentTime() {
-        LocalTime localTime = LocalTime.now();
+        CurrentDateTimeFetcher currentDateTimeFetcher = new CurrentDateTimeFetcher();
+        LocalTime localTime = currentDateTimeFetcher.localTime();
         localTime = localTime.truncatedTo(ChronoUnit.SECONDS);
         System.out.println(localTime);
         return localTime;
     }
 
     private LocalDate getCurrentDate() {
-        System.out.println(LocalDate.now());
-        return LocalDate.now();
+        CurrentDateTimeFetcher currentDateTimeFetcher = new CurrentDateTimeFetcher();
+        return currentDateTimeFetcher.localDate();
     }
 
 }
