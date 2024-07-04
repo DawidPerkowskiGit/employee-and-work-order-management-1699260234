@@ -1,6 +1,7 @@
 package dpapps.model;
 
 import dpapps.constants.DateConstants;
+import dpapps.tools.CurrentDateTimeFetcher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +55,8 @@ public class User {
         this.password = password;
         this.email = email;
         this.verified = false;
-        this.creationDate = LocalDate.now();
+        CurrentDateTimeFetcher currentDateTimeFetcher = new CurrentDateTimeFetcher();
+        this.creationDate = currentDateTimeFetcher.localDate();
     }
 
     public User(String login, String password, String email, String name) {
@@ -62,7 +64,8 @@ public class User {
         this.password = password;
         this.email = email;
         this.verified = false;
-        this.creationDate = LocalDate.now();
+        CurrentDateTimeFetcher currentDateTimeFetcher = new CurrentDateTimeFetcher();
+        this.creationDate = currentDateTimeFetcher.localDate();
         this.name = name;
     }
 
